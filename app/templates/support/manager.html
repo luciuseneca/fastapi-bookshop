@@ -1,0 +1,384 @@
+{% extends "base.html" %}
+
+{# токен менеджера хранится отдельно от токена покупателя #}
+{% block html_attrs %} data-token-scope="manager"{% endblock %}
+
+{% block title %}Панель поддержки{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="page-title">🎧 Панель менеджера поддержки</h1>
+
+    <div class="card" id="manager-login" style="max-width:420px;margin:2rem auto;padding:1.75rem;" hidden>
+        <h2 class="section-title" style="margin-top:0;">Вход для менеджеров</h2>
+        <form id="login-form">
+            <div class="form-group">
+                <label class="form-label" for="login-email">Email</label>
+                <input class="form-input" id="login-email" type="email" required autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="login-password">Пароль</label>
+                <input class="form-input" id="login-password" type="password" required autocomplete="current-password">
+            </div>
+            <div class="form-error" id="login-error"></div>
+            <button class="btn btn-block" type="submit">Войти</button>
+        </form>
+    </div>
+
+    <div id="manager-panel" hidden>
+    <div class="tabs">
+        <button class="tab active" data-status="queue">📥 Очередь</button>
+        <button class="tab" data-status="active">💬 Активные</button>
+        <button class="tab" data-status="closed">✅ Закрытые</button>
+    </div>
+
+    <div class="manager-layout">
+        <aside id="chat-list"></aside>
+
+        <div class="chat-shell" style="height:calc(100vh - 260px);">
+            <div class="chat-head">
+                <span id="chat-title">Выберите чат</span>
+                <span class="chat-status off" id="ws-status"></span>
+            </div>
+            <div class="chat-body" id="chat-body">
+                <div class="empty-state"><div class="icon">👈</div><p>Выберите чат из списка</p></div>
+            </div>
+            <div class="chat-input-row">
+                <div class="tpl-panel" id="tpl-panel" hidden>
+                    <div class="tpl-head">
+                        <span>📋 Шаблоны ответов</span>
+                        <button class="btn btn-ghost btn-sm" id="tpl-add-toggle">➕ Новый</button>
+                    </div>
+                    <div class="tpl-list" id="tpl-list"></div>
+                    <form class="tpl-form" id="tpl-form" hidden>
+                        <input class="form-input" id="tpl-title" placeholder="Название шаблона" maxlength="120" required>
+                        <textarea class="form-textarea" id="tpl-content" placeholder="Текст ответа клиенту…" rows="3" maxlength="2000" required></textarea>
+                        <button class="btn btn-sm" type="submit">Сохранить шаблон</button>
+                    </form>
+                </div>
+                <button class="btn btn-outline" id="btn-assign" hidden>Взять в работу</button>
+                <button class="btn btn-ghost" id="btn-templates" title="Шаблоны ответов">📋</button>
+                <input class="form-input" id="chat-input" placeholder="Ответ клиенту…" disabled>
+                <button class="btn" id="chat-send" disabled>Отправить</button>
+                <button class="btn btn-danger" id="btn-close" hidden>Закрыть</button>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(async () => {
+    const loginBox = document.getElementById("manager-login");
+    const panelBox = document.getElementById("manager-panel");
+    const loginErr = document.getElementById("login-error");
+
+    const listEl = document.getElementById("chat-list");
+    const body = document.getElementById("chat-body");
+    const input = document.getElementById("chat-input");
+    const sendBtn = document.getElementById("chat-send");
+    const assignBtn = document.getElementById("btn-assign");
+    const closeBtn = document.getElementById("btn-close");
+    const statusEl = document.getElementById("ws-status");
+
+    let currentStatus = "queue";
+    let currentChat = null;
+    let ws = null;
+    let msgOffset = 0;
+    const MSG_LIMIT = 50;
+
+    const scroll = () => { body.scrollTop = body.scrollHeight; };
+
+    function addMsg({ sender, content, created_at }, { prepend = false } = {}) {
+        const el = document.createElement("div");
+        const mine = sender === "manager";
+        el.className = `msg ${mine ? "msg-user" : "msg-other"}`;
+        if (!mine) {
+            const label = { bot: "🤖 Бот", user: "🙋 Клиент" }[sender] ?? sender;
+            el.innerHTML = `<div class="msg-sender">${esc(label)}</div>`;
+        }
+        el.appendChild(document.createTextNode(content));
+        if (created_at) el.title = new Date(created_at).toLocaleString("ru-RU");
+        prepend ? body.prepend(el) : body.appendChild(el);
+        if (!prepend) scroll();
+    }
+
+    /* ---------- список чатов ---------- */
+    async function loadChats() {
+        listEl.innerHTML = '<div class="skeleton" style="height:4rem;margin-bottom:.5rem;"></div>'.repeat(3);
+        try {
+            const chats = await apiFetch(`/support/manager/chats?status=${currentStatus}`);
+            if (!chats.length) {
+                listEl.innerHTML = emptyState("📭", "Чатов нет");
+                return;
+            }
+            listEl.innerHTML = chats.map((c) => `
+                <div class="chat-list-item" data-id="${c.id}">
+                    <strong>Чат #${c.id}</strong> · клиент ${c.user_id}
+                    <div class="list-sub">
+                        ${c.escalation_reason ? `⚠️ ${esc(c.escalation_reason)} · ` : ""}
+                        ${c.last_message_at ? new Date(c.last_message_at).toLocaleString("ru-RU") : ""}
+                    </div>
+                </div>`).join("");
+
+            listEl.querySelectorAll(".chat-list-item").forEach((item) => {
+                item.addEventListener("click", () => openChat(Number(item.dataset.id), item));
+            });
+        } catch (e) {
+            listEl.innerHTML = emptyState("😕", e.status === 403 ? "Доступ только для менеджеров" : e.message);
+        }
+    }
+
+    /* ---------- история сообщений (offset-пагинация, asc) ---------- */
+    async function loadHistory(chatId) {
+        const messages = await apiFetch(
+            `/support/manager/chats/${chatId}/messages?limit=${MSG_LIMIT}&offset=${msgOffset}`);
+
+        body.querySelector(".history-more")?.remove();
+        messages.forEach((m) => addMsg(m));
+        msgOffset += messages.length;
+
+        if (messages.length >= MSG_LIMIT) {
+            const more = document.createElement("button");
+            more.className = "btn btn-ghost btn-sm history-more";
+            more.style.alignSelf = "center";
+            more.textContent = "↓ Показать ещё";
+            more.addEventListener("click", () => loadHistory(chatId).catch((e) => toast(e.message, "error")));
+            body.appendChild(more);
+            scroll();
+        }
+    }
+
+    /* ---------- открыть чат ---------- */
+    async function openChat(chatId, item) {
+        listEl.querySelector(".chat-list-item.active")?.classList.remove("active");
+        item.classList.add("active");
+
+        currentChat = chatId;
+        msgOffset = 0;
+        document.getElementById("chat-title").textContent = `Чат #${chatId}`;
+        assignBtn.hidden = currentStatus !== "queue";
+        closeBtn.hidden = currentStatus === "closed";
+
+        ws?.close();
+        body.innerHTML = "";
+
+        try {
+            await loadHistory(chatId);
+        } catch (e) {
+            body.innerHTML = emptyState("😕", e.message);
+            return;
+        }
+
+        if (currentStatus === "closed") return;
+
+        /* live-подключение */
+        const proto = location.protocol === "https:" ? "wss" : "ws";
+        ws = new WebSocket(`${proto}://${location.host}${API}/support/ws/manager/${chatId}?token=${encodeURIComponent(getToken())}`);
+
+        ws.onopen = () => {
+            statusEl.textContent = "онлайн";
+            statusEl.className = "chat-status on";
+            input.disabled = sendBtn.disabled = false;
+        };
+        ws.onmessage = (e) => {
+            let p;
+            try { p = JSON.parse(e.data); } catch { return; }
+            if (p.type === "message" && p.data?.sender !== "manager") addMsg(p.data);
+            if (p.type === "system") {
+                const el = document.createElement("div");
+                el.className = "msg msg-system";
+                el.textContent = String(p.data ?? "");
+                body.appendChild(el);
+                scroll();
+            }
+        };
+        ws.onclose = () => {
+            statusEl.textContent = "офлайн";
+            statusEl.className = "chat-status off";
+            input.disabled = sendBtn.disabled = true;
+        };
+    }
+
+    /* ---------- действия ---------- */
+    function send() {
+        const text = input.value.trim();
+        if (!text || !ws || ws.readyState !== WebSocket.OPEN) return;
+        ws.send(text);
+        addMsg({ sender: "manager", content: text });
+        input.value = "";
+    }
+
+    sendBtn.addEventListener("click", send);
+    input.addEventListener("keydown", (e) => { if (e.key === "Enter") send(); });
+
+    /* ---------- шаблоны ответов ---------- */
+    const tplPanel = document.getElementById("tpl-panel");
+    const tplList = document.getElementById("tpl-list");
+    const tplForm = document.getElementById("tpl-form");
+    const tplBtn = document.getElementById("btn-templates");
+
+    let templates = null; // null — ещё не загружали
+
+    function renderTemplates() {
+        if (!templates.length) {
+            tplList.innerHTML = emptyState("📭", "Шаблонов пока нет");
+            return;
+        }
+        tplList.innerHTML = templates.map((t) => `
+            <div class="tpl-item" data-id="${t.id}">
+                <div class="tpl-item-body">
+                    <div class="tpl-item-title">${esc(t.title)}</div>
+                    <div class="tpl-item-preview">${esc(t.content)}</div>
+                </div>
+                <button class="btn btn-ghost btn-sm tpl-del" title="Удалить шаблон">✕</button>
+            </div>`).join("");
+
+        tplList.querySelectorAll(".tpl-item").forEach((item) => {
+            const tpl = templates.find((t) => t.id === Number(item.dataset.id));
+
+            item.addEventListener("click", (e) => {
+                if (e.target.closest(".tpl-del")) return;
+                if (input.disabled) { toast("Сначала откройте чат", "error"); return; }
+                input.value = tpl.content;
+                tplPanel.hidden = true;
+                input.focus();
+            });
+
+            item.querySelector(".tpl-del").addEventListener("click", async () => {
+                if (!confirm(`Удалить шаблон «${tpl.title}»?`)) return;
+                try {
+                    await apiFetch(`/support/manager/templates/${tpl.id}`, { method: "DELETE" });
+                    templates = templates.filter((t) => t.id !== tpl.id);
+                    renderTemplates();
+                    toast("Шаблон удалён", "success");
+                } catch (e) { toast(e.message, "error"); }
+            });
+        });
+    }
+
+    async function loadTemplates() {
+        tplList.innerHTML = '<div class="skeleton" style="height:3rem;margin:.35rem;"></div>'.repeat(3);
+        try {
+            templates = await apiFetch("/support/manager/templates");
+            renderTemplates();
+        } catch (e) {
+            templates = null;
+            tplList.innerHTML = emptyState("😕", e.message);
+        }
+    }
+
+    tplBtn.addEventListener("click", () => {
+        tplPanel.hidden = !tplPanel.hidden;
+        if (!tplPanel.hidden && templates === null) loadTemplates();
+    });
+
+    document.getElementById("tpl-add-toggle").addEventListener("click", () => {
+        tplForm.hidden = !tplForm.hidden;
+        if (!tplForm.hidden) document.getElementById("tpl-title").focus();
+    });
+
+    tplForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const title = document.getElementById("tpl-title").value.trim();
+        const content = document.getElementById("tpl-content").value.trim();
+        if (!title || !content) return;
+        try {
+            const created = await apiFetch("/support/manager/templates", {
+                method: "POST",
+                json: { title, content },
+            });
+            templates = [...(templates ?? []), created]
+                .sort((a, b) => a.title.localeCompare(b.title, "ru"));
+            renderTemplates();
+            tplForm.reset();
+            tplForm.hidden = true;
+            toast("Шаблон сохранён", "success");
+        } catch (err) { toast(err.message, "error"); }
+    });
+
+    // клик вне панели закрывает её
+    document.addEventListener("click", (e) => {
+        if (!tplPanel.hidden && !e.target.closest("#tpl-panel, #btn-templates")) {
+            tplPanel.hidden = true;
+        }
+    });
+
+    assignBtn.addEventListener("click", async () => {
+        if (!currentChat) return;
+        try {
+            await apiFetch(`/support/manager/chats/${currentChat}/assign`, { method: "POST" });
+            toast(`Чат #${currentChat} взят в работу`, "success");
+            assignBtn.hidden = true;
+            loadChats();
+        } catch (e) { toast(e.message, "error"); }
+    });
+
+    closeBtn.addEventListener("click", async () => {
+        if (!currentChat) return;
+        try {
+            await apiFetch(`/support/manager/chats/${currentChat}/close`, { method: "POST" });
+            toast(`Чат #${currentChat} закрыт`, "success");
+            ws?.close();
+            loadChats();
+        } catch (e) { toast(e.message, "error"); }
+    });
+
+    /* ---------- вкладки статусов ---------- */
+    document.querySelectorAll(".tabs .tab").forEach((tab) => {
+        tab.addEventListener("click", () => {
+            document.querySelector(".tabs .active")?.classList.remove("active");
+            tab.classList.add("active");
+            currentStatus = tab.dataset.status;
+            loadChats();
+        });
+    });
+
+    /* ---------- вход менеджера ---------- */
+    function showLogin(msg = "") {
+        panelBox.hidden = true;
+        loginBox.hidden = false;
+        loginErr.textContent = msg;
+    }
+
+    function showPanel() {
+        loginBox.hidden = true;
+        panelBox.hidden = false;
+        loadChats();
+    }
+
+    document.getElementById("login-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        loginErr.textContent = "";
+        try {
+            const jwt = await apiFetch("/support/manager/login", {
+                method: "POST",
+                json: {
+                    email: document.getElementById("login-email").value.trim(),
+                    password: document.getElementById("login-password").value,
+                },
+            });
+            setToken(jwt.access_token);
+            showPanel();
+        } catch (err) {
+            loginErr.textContent = err.status === 401 ? "Неверный email или пароль" : err.message;
+        }
+    });
+
+    /* старт: если уже вошли менеджером — сразу панель */
+    const token = getToken() || await refreshAccessToken();
+    if (!token) {
+        showLogin();
+    } else {
+        try {
+            await apiFetch("/support/manager/chats?status=queue");
+            showPanel();
+        } catch (err) {
+            showLogin(err.status === 403 ? "Этот аккаунт — не менеджер. Войдите под аккаунтом менеджера." : "");
+        }
+    }
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,50 @@
+services:
+  fastapi:
+    image: bookshop:ci
+    env_file:
+      - .env.ci
+    volumes:
+      - ./cert:/cert:ro
+    # без poetry: его нет в финальном образе, .venv/bin уже в PATH
+    command: pytest
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:17.6
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bookshop
+    volumes:
+      - ./app/core/db/init/test_db.sql:/docker-entrypoint-initdb.d/test_db.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+
+  # тот же образ, что и в dev: rabbitmq 4.2 + delayed-message-плагин,
+  # иначе CI тестирует другой брокер
+  rabbitmq:
+    build:
+      context: ./app/shared/service/infrastructure/rabbitmq
+      dockerfile: Dockerfile
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
