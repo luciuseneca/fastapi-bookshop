@@ -199,3 +199,6 @@ cython_debug/
 # Local agent instructions
 AGENTS.md
 .vscode
+
+# Привязка существующих Docker-томов конкретного компьютера.
+docker-compose.override.yml

@@ -1,3 +1,11 @@
+# Одинаковая ротация логов на macOS, Windows и Linux.
+x-logging: &logging
+  driver: local
+  options:
+    max-size: "10m"
+    max-file: "3"
+    compress: "true"
+
 # Выносим общие настройки в якорь (extension field)
 x-app-base: &app-base
   # общий тег: без него compose собирает и тегает один и тот же образ
@@ -7,6 +15,7 @@ x-app-base: &app-base
     context: .
     dockerfile: Dockerfile
   restart: unless-stopped
+  logging: *logging
   env_file:
     - .env
   # host.docker.internal есть из коробки только в Docker Desktop;
@@ -85,14 +94,22 @@ services:
     image: redis:7-alpine
     container_name: redis
     restart: unless-stopped
+    logging: *logging
     command: redis-server --notify-keyspace-events Ex
+    volumes:
+      - redis_data:/data
 
   rabbitmq:
     build:
       context: ./app/shared/service/infrastructure/rabbitmq
-      dockerfile: Dockerfile
+      dockerfile: dockerfile
     container_name: rabbitmq
+    # Имя узла RabbitMQ должно сохраняться вместе с его данными.
+    hostname: rabbitmq
     restart: unless-stopped
+    logging: *logging
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
     # 127.0.0.1: порты не светятся в LAN и не конфликтуют с чужими сервисами
     ports:
       - "127.0.0.1:15672:15672"
@@ -109,6 +126,7 @@ services:
     image: postgres:17.6
     container_name: postgres
     restart: unless-stopped
+    logging: *logging
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
@@ -145,6 +163,7 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:9.0.0
     container_name: elasticsearch
     restart: unless-stopped
+    logging: *logging
     environment:
       - discovery.type=single-node
       - xpack.security.enabled=false
@@ -165,6 +184,7 @@ services:
     image: qdrant/qdrant:v1.17.0
     container_name: qdrant
     restart: unless-stopped
+    logging: *logging
     ports:
       - "127.0.0.1:6333:6333"
       - "127.0.0.1:6334:6334"
@@ -225,6 +245,8 @@ services:
       #   condition: service_started
 
 volumes:
+  redis_data:
+  rabbitmq_data:
   postgres_data:
   elasticsearch_data:
   qdrant_data:
