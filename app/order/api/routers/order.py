@@ -9,9 +9,9 @@ from fastapi import (
     status,
 )
 
-from app.client.api.dependencies import auth_client
-from app.client.api.requests.user.auth import UserAuthorizedREQT
-from app.client.db.postgres.repositories.sqlalchemy import UserSQLAlchemyREPO
+from app.user.api.dependencies import auth_client
+from app.user.api.requests.user.auth import UserAuthorizedREQT
+from app.user.db.postgres.repositories.sqlalchemy import UserSQLAlchemyREPO
 from app.core.config.base import get_settings
 from app.core.db.postgres import SessionDependency
 from app.order.api.requests.order.create import CreateOrderREQT

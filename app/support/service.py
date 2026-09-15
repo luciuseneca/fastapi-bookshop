@@ -3,7 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.client.db.postgres.models import ClientModel, ClientRoleENUM
+from app.user.db.postgres.models import UserModel, UserRoleENUM
 from app.support.api.responses.templates import ReplyTemplateCreate, ReplyTemplateUpdate
 from app.support.models import ChatMessageModel, ChatModel, ReplyTemplateModel
 from app.support.services.chat.assign_manager import assign_manager_to_chat
@@ -15,10 +15,10 @@ class ManagerChatService:
     @staticmethod
     async def get_chats(
         db: AsyncSession,
-        manager: ClientModel,
+        manager: UserModel,
         status_filter: str,
     ) -> list[ChatModel]:
-        if manager.role != ClientRoleENUM.MANAGER:
+        if manager.role != UserRoleENUM.MANAGER:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Forbidden",
@@ -53,10 +53,10 @@ class ManagerChatService:
     @staticmethod
     async def assign_chat(
         db: AsyncSession,
-        manager: ClientModel,
+        manager: UserModel,
         chat_id: int,
     ) -> ChatModel:
-        if manager.role != ClientRoleENUM.MANAGER:
+        if manager.role != UserRoleENUM.MANAGER:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Forbidden",
@@ -85,10 +85,10 @@ class ManagerChatService:
     @staticmethod
     async def close_chat(
         db: AsyncSession,
-        manager: ClientModel,
+        manager: UserModel,
         chat_id: int,
     ) -> ChatModel:
-        if manager.role != ClientRoleENUM.MANAGER:
+        if manager.role != UserRoleENUM.MANAGER:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Forbidden",
@@ -117,12 +117,12 @@ class ManagerChatService:
     @staticmethod
     async def get_chat_history(
         db: AsyncSession,
-        manager: ClientModel,
+        manager: UserModel,
         chat_id: int,
         limit: int = 50,
         offset: int = 0,
     ) -> list[ChatMessageModel]:
-        if manager.role != ClientRoleENUM.MANAGER:
+        if manager.role != UserRoleENUM.MANAGER:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Forbidden",
@@ -159,8 +159,8 @@ class ManagerReplyTemplateService:
     """Шаблоны быстрых ответов: общие для всех менеджеров поддержки."""
 
     @staticmethod
-    def _ensure_manager(manager: ClientModel) -> None:
-        if manager.role != ClientRoleENUM.MANAGER:
+    def _ensure_manager(manager: UserModel) -> None:
+        if manager.role != UserRoleENUM.MANAGER:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Forbidden",
@@ -184,7 +184,7 @@ class ManagerReplyTemplateService:
     @staticmethod
     async def get_templates(
         db: AsyncSession,
-        manager: ClientModel,
+        manager: UserModel,
     ) -> list[ReplyTemplateModel]:
         ManagerReplyTemplateService._ensure_manager(manager)
 
@@ -196,7 +196,7 @@ class ManagerReplyTemplateService:
     @staticmethod
     async def create_template(
         db: AsyncSession,
-        manager: ClientModel,
+        manager: UserModel,
         data: ReplyTemplateCreate,
     ) -> ReplyTemplateModel:
         ManagerReplyTemplateService._ensure_manager(manager)
@@ -219,7 +219,7 @@ class ManagerReplyTemplateService:
     @staticmethod
     async def update_template(
         db: AsyncSession,
-        manager: ClientModel,
+        manager: UserModel,
         template_id: int,
         data: ReplyTemplateUpdate,
     ) -> ReplyTemplateModel:
@@ -245,7 +245,7 @@ class ManagerReplyTemplateService:
     @staticmethod
     async def delete_template(
         db: AsyncSession,
-        manager: ClientModel,
+        manager: UserModel,
         template_id: int,
     ) -> None:
         ManagerReplyTemplateService._ensure_manager(manager)

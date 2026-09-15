@@ -9,7 +9,7 @@ from sqlalchemy.orm import (
     mapped_column,
     relationship,
 )
-from app.client.db.postgres.models import ClientModel
+from app.user.db.postgres.models import UserModel
 from app.core.db.models.base import Base
 from app.core.db.models.mixins import IDMixin, TimestampMixin
 from app.product.db.postgres.models.book import BookModel
@@ -24,7 +24,7 @@ class CartModel(Base, IDMixin, TimestampMixin):
     )
 
     # ORM relations
-    user: Mapped["ClientModel"] = relationship(back_populates="cart")
+    user: Mapped["UserModel"] = relationship(back_populates="cart")
     items: Mapped[list["CartItemModel"]] = relationship(
         back_populates="cart",
         cascade="all, delete-orphan",

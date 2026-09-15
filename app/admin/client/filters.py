@@ -1,4 +1,4 @@
-from app.client.db.postgres.models import ClientRoleENUM, OAuthProviderENUM
+from app.user.db.postgres.models import UserRoleENUM, OAuthProviderENUM
 
 class ClientRoleFilterAdmin:
     title = "Client Role"
@@ -7,7 +7,7 @@ class ClientRoleFilterAdmin:
     def lookups(self, request, model, run_query) -> list[tuple[str, str]]:
         return [
             (role.value, role.value.capitalize())
-            for role in ClientRoleENUM
+            for role in UserRoleENUM
         ]
 
     async def get_filtered_query(self, stmt, value, model):

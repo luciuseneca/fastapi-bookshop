@@ -5,8 +5,8 @@ from decimal import Decimal, ROUND_HALF_UP
 import stripe
 from sqlalchemy.exc import DBAPIError
 
-from app.client.db.postgres.repositories.sqlalchemy import UserSQLAlchemyREPO
-from app.client.exception.user.exists import UserNotFoundERR
+from app.user.db.postgres.repositories.sqlalchemy import UserSQLAlchemyREPO
+from app.user.exception.user.exists import UserNotFoundERR
 from app.core.config.base import get_settings
 from app.order.api.requests.order.create import CreateOrderREQT
 from app.order.db.models.order import (

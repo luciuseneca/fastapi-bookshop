@@ -1,10 +1,10 @@
-from app.client.exception.user.exists import UserNotFoundERR
+from app.user.exception.user.exists import UserNotFoundERR
 from app.product.db.postgres.repositories.sqlalchemy.book import BookSQLAlchemyREPO
 from app.product.exceptions import BookNotFoundERR
 from app.shared.service.infrastructure.base import is_exists
 from app.order.exceptions.wishlist import WishlistItemNotFound
 from app.shared.db.postgres.repositories.sqlalchemy.transaction import SQLAlchemyTransaction
-from app.client.db.postgres.repositories.sqlalchemy import UserSQLAlchemyREPO
+from app.user.db.postgres.repositories.sqlalchemy import UserSQLAlchemyREPO
 
 class RemoveBookFromWishlist:
     def __init__(

@@ -1,8 +1,8 @@
 import pytest
-from unittest.mock import Mock, patch
+from unittest.mock import AsyncMock, patch
 
-from app.client.exception.otp.invalid import OtpNotExpired
-from app.client.exception.user.exists import UserNotFoundERR
+from app.user.exception.otp.expire import OtpNotExpiredERR
+from app.user.exception.user.invalid_creds import UserInvalidCredentialsERR
 
 @pytest.mark.asyncio
 async def test_login_success(
@@ -13,21 +13,22 @@ async def test_login_success(
     user_login_reqt,
 ):
     fake_user_repository.get_by_email_and_active.return_value = fake_user
-    fake_otp_repository.get_by_email.return_value = None
+    fake_otp_repository.get_by_owner.return_value = None
 
     with patch(
-        "app.user.usecases.authentication.check_password",
+        "app.user.service.usecase.user.authentication.user_check_password",
         return_value=True,
     ), patch(
-        "app.user.usecases.authentication.generate_otp",
+        "app.user.service.usecase.user.authentication.generate_otp",
         return_value="123456",
     ), patch(
-        "app.user.usecases.authentication.send_otp_email.delay"
+        "app.user.service.usecase.user.authentication.send_otp_email.kiq",
+        new_callable=AsyncMock,
     ) as mock_send_email:
         await user_authentication_usecase.login(user_login_reqt)
 
-        fake_otp_repository.save.assert_awaited_once()
-        mock_send_email.assert_called_once_with(
+        fake_otp_repository.create.assert_awaited_once()
+        mock_send_email.assert_awaited_once_with(
             user_login_reqt.email,
             "123456",
         )
@@ -41,7 +42,7 @@ async def test_login_user_not_found(
 ):
     fake_user_repository.get_by_email_and_active.return_value = None
 
-    with pytest.raises(UserNotFoundERR):
+    with pytest.raises(UserInvalidCredentialsERR):
         await user_authentication_usecase.login(user_login_reqt)
 
 
@@ -55,11 +56,11 @@ async def test_login_otp_not_expired(
     user_login_reqt,
 ):
     fake_user_repository.get_by_email_and_active.return_value = fake_user
-    fake_otp_repository.get_by_email.return_value = fake_otp
+    fake_otp_repository.get_by_owner.return_value = fake_otp
 
     with patch(
-        "app.user.usecases.authentication.check_password",
+        "app.user.service.usecase.user.authentication.user_check_password",
         return_value=True,
     ):
-        with pytest.raises(OtpNotExpired):
+        with pytest.raises(OtpNotExpiredERR):
             await user_authentication_usecase.login(user_login_reqt)

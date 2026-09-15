@@ -6,11 +6,11 @@ from dishka import (
 from elasticsearch import AsyncElasticsearch
 from qdrant_client import AsyncQdrantClient
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.client.db.postgres.repositories.sqlalchemy import UserSQLAlchemyREPO
-from app.client.db.postgres.repositories.sqlalchemy.user_event import UserEventSQLAlchemyREPO
-from app.client.db.qdrant.repositories.user.reco_profile import UserRecoProfileQdrantREPO
-from app.client.service.infrastructure.taskiq.schedules.user.base import UserTaskiqSchedulesPublisher
-from app.client.service.infrastructure.user.reco_profile import UserPersonalBooksRecoProfile, UserPersonalBooksRecoProfileCache, UserProfileUpdateProcess
+from app.user.db.postgres.repositories.sqlalchemy import UserSQLAlchemyREPO
+from app.user.db.postgres.repositories.sqlalchemy.user_event import UserEventSQLAlchemyREPO
+from app.user.db.qdrant.repositories.user.reco_profile import UserRecoProfileQdrantREPO
+from app.user.service.infrastructure.taskiq.schedules.user.base import UserTaskiqSchedulesPublisher
+from app.user.service.infrastructure.user.reco_profile import UserPersonalBooksRecoProfile, UserPersonalBooksRecoProfileCache, UserProfileUpdateProcess
 from app.core.db.postgres import DatabaseHelper
 from app.product.db.postgres.repositories.sqlalchemy.author import BookAuthorSQLAlchemyREPO
 from app.product.db.postgres.repositories.sqlalchemy.book import BookSQLAlchemyREPO

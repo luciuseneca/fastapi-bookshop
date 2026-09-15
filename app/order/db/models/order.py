@@ -136,7 +136,7 @@ class AddressModel(Base, IDMixin, TimestampMixin):
         lazy="raise"
     )
 
-    user: Mapped["ClientModel"] = relationship(
+    user: Mapped["UserModel"] = relationship(
         back_populates="addresses",
         lazy="raise"
     )
@@ -166,7 +166,7 @@ class OrderModel(Base, IDMixin, TimestampMixin):
     )
 
     # ORM relations
-    user: Mapped["ClientModel"] = relationship(
+    user: Mapped["UserModel"] = relationship(
         back_populates="orders", 
         lazy="raise",
     )
@@ -185,4 +185,4 @@ class OrderModel(Base, IDMixin, TimestampMixin):
     )
 
 
-from app.client.db.postgres.models import ClientModel
+from app.user.db.postgres.models import UserModel

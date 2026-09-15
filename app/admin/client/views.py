@@ -3,19 +3,19 @@ from sqladmin import ModelView
 from sqladmin.filters import BooleanFilter, OperationColumnFilter
 from app.admin.client.filters import ClientRoleFilterAdmin, OauthProviderFilterAdmin
 from app.admin.column_type_formatters import datetime_format
-from app.client.db.postgres.models import ClientModel
+from app.user.db.postgres.models import UserModel
 
-class ClientAdmin(ModelView, model=ClientModel):
+class ClientAdmin(ModelView, model=UserModel):
     name = "Client"
     name_plural = "Clients"
     icon = "fa-solid fa-user"
     identity = "client"
 
     column_labels = {
-        ClientModel.is_active: "is active",
-        ClientModel.role: "role",
-        ClientModel.created_at: "created at",
-        ClientModel.updated_at: "updated at"
+        UserModel.is_active: "is active",
+        UserModel.role: "role",
+        UserModel.created_at: "created at",
+        UserModel.updated_at: "updated at"
     }
     column_type_formatters = {
         datetime: datetime_format
@@ -23,25 +23,25 @@ class ClientAdmin(ModelView, model=ClientModel):
 
     # list
     column_list = [
-        ClientModel.id,
-        ClientModel.email,
-        ClientModel.username,
-        ClientModel.oauth_provider,
-        ClientModel.is_active,
-        ClientModel.role,
-        ClientModel.created_at,
-        ClientModel.updated_at,
+        UserModel.id,
+        UserModel.email,
+        UserModel.username,
+        UserModel.oauth_provider,
+        UserModel.is_active,
+        UserModel.role,
+        UserModel.created_at,
+        UserModel.updated_at,
     ]
     column_formatters = {
-        ClientModel.username: lambda m, a: m.username[:10] if m.username else ""
+        UserModel.username: lambda m, a: m.username[:10] if m.username else ""
     }
-    column_searchable_list = [ClientModel.id, ClientModel.email]
-    column_sortable_list = [ClientModel.id, ClientModel.created_at]
+    column_searchable_list = [UserModel.id, UserModel.email]
+    column_sortable_list = [UserModel.id, UserModel.created_at]
     column_filters = [
         OauthProviderFilterAdmin(),
         ClientRoleFilterAdmin(),
-        BooleanFilter(ClientModel.is_active),
-        OperationColumnFilter(ClientModel.email),
+        BooleanFilter(UserModel.is_active),
+        OperationColumnFilter(UserModel.email),
     ]
     
     page_size = 25
@@ -49,25 +49,25 @@ class ClientAdmin(ModelView, model=ClientModel):
 
     # detail
     column_details_list = [
-        ClientModel.id,
-        ClientModel.email,
-        ClientModel.username,
-        ClientModel.is_active,
-        ClientModel.role,
-        ClientModel.oauth_provider,
-        ClientModel.oauth_id,
-        ClientModel.created_at,
-        ClientModel.updated_at,
+        UserModel.id,
+        UserModel.email,
+        UserModel.username,
+        UserModel.is_active,
+        UserModel.role,
+        UserModel.oauth_provider,
+        UserModel.oauth_id,
+        UserModel.created_at,
+        UserModel.updated_at,
     ]
 
     # form
     form_columns = [
-        ClientModel.email,
-        ClientModel.username,
-        ClientModel.password,
-        ClientModel.role,
-        ClientModel.is_active,
-        ClientModel.reviews
+        UserModel.email,
+        UserModel.username,
+        UserModel.password,
+        UserModel.role,
+        UserModel.is_active,
+        UserModel.reviews
     ]
     form_ajax_refs = {
         "reviews": {

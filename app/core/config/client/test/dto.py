@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from app.client.db.postgres.models import OAuthProviderENUM
+from app.user.db.postgres.models import OAuthProviderENUM
 
 @dataclass(frozen=True, slots=True)
 class UserTestConf:

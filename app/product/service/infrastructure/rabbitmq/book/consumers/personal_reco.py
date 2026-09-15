@@ -5,10 +5,10 @@ from aio_pika.abc import (
     AbstractIncomingMessage,
     AbstractQueue,
 )
-from app.client.api.events.user.personal_reco import (
+from app.user.api.events.user.personal_reco import (
     UserPersonalRecoEVENT,
 )
-from app.client.service.infrastructure.rabbitmq.producer.reco_events import USER_EVENTS_EXCHANGE_NAME
+from app.user.service.infrastructure.rabbitmq.producer.reco_events import USER_EVENTS_EXCHANGE_NAME
 from app.product.service.usecase.book.personal_reco import BookPersonalRecoForUserUC
 from app.shared.service.infrastructure.dishka.base import get_container
 from app.shared.service.infrastructure.rabbitmq.connection import (

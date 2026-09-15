@@ -1,7 +1,7 @@
 import pytest
 from app.product.db.postgres.repositories.sqlalchemy.book import BookSQLAlchemyREPO
 from app.order.db.sqlalchemy.repositories.cart import CartItemSQLAlchemyRepository, CartSQLAlchemyRepository
-from app.client.db.postgres.repositories.sqlalchemy import UserSQLAlchemyREPO
+from app.user.db.postgres.repositories.sqlalchemy import UserSQLAlchemyREPO
 
 @pytest.fixture
 def book_repository(db_session):

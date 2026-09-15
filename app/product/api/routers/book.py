@@ -9,15 +9,15 @@ from fastapi import (
     Query,
     status,
 )
-from app.client.api.dependencies import auth_client, auth_user_optional
-from app.client.api.events.user.personal_reco import UserPersonalRecoEVENT
-from app.client.api.requests.user.auth import UserAuthorizedREQT
-from app.client.db.postgres.models import UserEventENUM
-from app.client.service.infrastructure.rabbitmq.producer.reco_events import (
+from app.user.api.dependencies import auth_client, auth_user_optional
+from app.user.api.events.user.personal_reco import UserPersonalRecoEVENT
+from app.user.api.requests.user.auth import UserAuthorizedREQT
+from app.user.db.postgres.models import UserEventENUM
+from app.user.service.infrastructure.rabbitmq.producer.reco_events import (
     publish_user_personal_books_reco_rmq,
     publish_user_personal_books_reco_rmq_safe,
 )
-from app.client.service.infrastructure.user.reco_profile import UserPersonalBooksRecoProfile
+from app.user.service.infrastructure.user.reco_profile import UserPersonalBooksRecoProfile
 from app.product.api.events.book.personal_reco import BookPersonalRecoEVENT, SearchEventMeta
 from app.product.api.requests.filter_by_category import (
     CategoryBooksByAuthorNameREQT,

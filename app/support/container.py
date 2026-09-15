@@ -19,8 +19,8 @@ from app.support.db.sqlalchemy.repositories.manager import ManagerSQLAlchemyRepo
 from app.support.usecase.bot_answer import BotAnswerUC
 from app.support.usecase.close import CloseChatUC
 from app.support.usecase.escalation import ChatEscalationUC
-from app.client.service.infrastructure.jwt.generator import JWTGenerator
-from app.client.service.infrastructure.jwt.refresh_session import JWTRefreshAuthSession
+from app.user.service.infrastructure.jwt.generator import JWTGenerator
+from app.user.service.infrastructure.jwt.refresh_session import JWTRefreshAuthSession
 from app.support.usecase.manager.assign_to_chat import AssignManagerToChatUC
 from app.support.usecase.manager.handle_messages import HandleManagerMessageUC
 from app.support.usecase.manager.leave_chat import ManagerLeaveChatUC

@@ -1,7 +1,7 @@
 from datetime import datetime
 from sqladmin import ModelView
 from app.admin.column_type_formatters import datetime_format
-from app.client.db.postgres.models import UserEventENUM, UserEventModel
+from app.user.db.postgres.models import UserEventENUM, UserEventModel
 
 
 class UserEventTypeFilter:

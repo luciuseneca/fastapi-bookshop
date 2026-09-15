@@ -4,17 +4,17 @@ from fastapi import (
     Depends,
     status,
 )
-from app.client.api.events.user.personal_reco import UserPersonalRecoEVENT
-from app.client.api.requests.user.auth import UserAuthorizedREQT
-from app.client.db.postgres.models import UserEventENUM
-from app.client.service.infrastructure.rabbitmq.producer.reco_events import publish_user_personal_books_reco_rmq_safe
+from app.user.api.events.user.personal_reco import UserPersonalRecoEVENT
+from app.user.api.requests.user.auth import UserAuthorizedREQT
+from app.user.db.postgres.models import UserEventENUM
+from app.user.service.infrastructure.rabbitmq.producer.reco_events import publish_user_personal_books_reco_rmq_safe
 from app.product.api.events.book.personal_reco import RatingEventMeta
 from app.product.api.requests.review.write import ReviewWriteREQT
 from app.product.api.responses.review.preview import ReviewsPreviewPaginationRESP
 from app.product.service.infrastructure.query_handlers.review.filter import BookReviewFilterQH
 from app.product.service.usecase.review.write import WriteReview
 from app.shared.api.requests.offset_pagination import OffsetPagination
-from app.client.api.dependencies import auth_client
+from app.user.api.dependencies import auth_client
 from dishka.integrations.fastapi import inject
 
 book_review_router = APIRouter(prefix="/reviews", tags=["⭐ Отзывы Книг"])

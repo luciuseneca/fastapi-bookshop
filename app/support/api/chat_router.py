@@ -8,10 +8,10 @@ from fastapi import APIRouter, Depends, Query, Response, WebSocket, WebSocketDis
 from fastapi.websockets import WebSocketState
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.client.api.cookies import set_auth_cookies
-from app.client.api.dependencies import auth_user_ws
-from app.client.api.responses.jwt.access import JwtAccessTokenRESP
-from app.client.db.postgres.models import ClientModel
+from app.user.api.cookies import set_auth_cookies
+from app.user.api.dependencies import auth_user_ws
+from app.user.api.responses.jwt.access import JwtAccessTokenRESP
+from app.user.db.postgres.models import UserModel
 from app.core.config.client.jwt.roles import AUTHORIZED_MANAGER, AUTHORIZED_USER
 from app.core.config.shared.redis.pubsub.listen_expired_keys import LISTEN_EXPIRED_KEYS_CHANNEL
 from app.core.config.support.redis.cache.user_schat import chat_schat_cache_key, user_chat_cache_key
@@ -375,7 +375,7 @@ async def manager_login(
 )
 async def get_manager_chats(
     status_filter: str = Query(..., alias="status", pattern="^(queue|active|closed)$"),
-    user: ClientModel = Depends(get_current_manager),
+    user: UserModel = Depends(get_current_manager),
     db: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await ManagerChatService.get_chats(
@@ -393,7 +393,7 @@ async def get_manager_chats(
 async def assign_chat(
     chat_id: int,
     redis_keyspace: FromDishka[RedisClient],
-    user: ClientModel = Depends(get_current_manager),
+    user: UserModel = Depends(get_current_manager),
     db: AsyncSession = Depends(db_helper.session_getter),
 ):
     chat = await ManagerChatService.assign_chat(
@@ -417,7 +417,7 @@ async def close_chat(
     chat_id: int,
     redis_keyspace: FromDishka[RedisClient],
     redis_pubsub: FromDishka[RedisPubsub],
-    user: ClientModel = Depends(get_current_manager),
+    user: UserModel = Depends(get_current_manager),
     db: AsyncSession = Depends(db_helper.session_getter),
 ):
     chat = await ManagerChatService.close_chat(
@@ -442,7 +442,7 @@ async def close_chat(
     response_model=list[ReplyTemplateRead],
 )
 async def get_reply_templates(
-    user: ClientModel = Depends(get_current_manager),
+    user: UserModel = Depends(get_current_manager),
     db: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await ManagerReplyTemplateService.get_templates(db=db, manager=user)
@@ -455,7 +455,7 @@ async def get_reply_templates(
 )
 async def create_reply_template(
     body: ReplyTemplateCreate,
-    user: ClientModel = Depends(get_current_manager),
+    user: UserModel = Depends(get_current_manager),
     db: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await ManagerReplyTemplateService.create_template(
@@ -472,7 +472,7 @@ async def create_reply_template(
 async def update_reply_template(
     template_id: int,
     body: ReplyTemplateUpdate,
-    user: ClientModel = Depends(get_current_manager),
+    user: UserModel = Depends(get_current_manager),
     db: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await ManagerReplyTemplateService.update_template(
@@ -489,7 +489,7 @@ async def update_reply_template(
 )
 async def delete_reply_template(
     template_id: int,
-    user: ClientModel = Depends(get_current_manager),
+    user: UserModel = Depends(get_current_manager),
     db: AsyncSession = Depends(db_helper.session_getter),
 ):
     await ManagerReplyTemplateService.delete_template(
@@ -507,7 +507,7 @@ async def get_chat_history(
     chat_id: int,
     limit: int = Query(50, ge=1, le=200),
     offset: int = Query(0, ge=0),
-    user: ClientModel = Depends(get_current_manager),
+    user: UserModel = Depends(get_current_manager),
     db: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await ManagerChatService.get_chat_history(

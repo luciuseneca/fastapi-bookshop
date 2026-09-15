@@ -1,17 +1,17 @@
 import pytest
 from unittest.mock import patch
-from app.client.exception.otp.expire import OtpNotExpiredERR
-from app.client.exception.user.invalid_creds import UserInvalidCredentialsERR
-from app.client.service.infrastructure.otp.auth_session import otp_generate_session_id
+from app.user.exception.otp.expire import OtpNotExpiredERR
+from app.user.exception.user.invalid_creds import UserInvalidCredentialsERR
+from app.user.service.infrastructure.otp.auth_session import otp_generate_session_id
 from app.core.config.client.test.dto import user_test_conf
 from app.core.config.client.otp.test.dto import otp_test_conf
-from app.client.dto.otp.base import OtpDTO
+from app.user.dto.otp.base import OtpDTO
 from app.core.config.base import get_settings
 
 settings = get_settings()
 
 @pytest.mark.asyncio
-@patch("app.client.service.usecase.user.authentication.send_otp_email.kiq")
+@patch("app.user.service.usecase.user.authentication.send_otp_email.kiq")
 async def test_user_login_success(
     mock_send_email,
     user_authentication_usecase,

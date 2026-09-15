@@ -10,9 +10,9 @@ from enum import StrEnum
 from app.shared.service.infrastructure.redis.clients import RedisClient
 from qdrant_client.models import ScoredPoint
 from sqlalchemy import Row, and_, or_, select
-from app.client.db.qdrant.repositories.user.reco_profile import UserRecoProfileQdrantREPO
-from app.client.dto.user.reco_profile import UserRecoProfileDTO
-from app.client.service.infrastructure.user.reco_profile import UserPersonalBooksRecoProfile
+from app.user.db.qdrant.repositories.user.reco_profile import UserRecoProfileQdrantREPO
+from app.user.dto.user.reco_profile import UserRecoProfileDTO
+from app.user.service.infrastructure.user.reco_profile import UserPersonalBooksRecoProfile
 from app.core.db.postgres import DatabaseHelper
 from app.product.db.postgres.models.book import BookModel
 from app.product.db.postgres.repositories.sqlalchemy.book import (

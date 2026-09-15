@@ -23,8 +23,8 @@ scheduler = TaskiqScheduler(
     sources=[LabelScheduleSource(taskiq_broker)],
 )
 
-import app.client.service.infrastructure.taskiq.tasks
-import app.client.service.infrastructure.taskiq.schedules
+import app.user.service.infrastructure.taskiq.tasks
+import app.user.service.infrastructure.taskiq.schedules
 from app.product.service.infrastructure.taskiq.tasks.book.qdrant_index import qdrant_index_books_task
 from app.product.service.infrastructure.taskiq.tasks.book.elastic_index import elastic_index_books_task
 from app.product.service.infrastructure.taskiq.tasks.book.update_popular_books import update_books_popularity

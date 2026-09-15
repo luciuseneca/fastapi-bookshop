@@ -1,13 +1,13 @@
 import logging
-from app.client.api.events.user.personal_reco import UserPersonalRecoEVENT
-from app.client.db.postgres.repositories.sqlalchemy.user_event import UserEventSQLAlchemyREPO
-from app.client.service.infrastructure.taskiq.schedules.user.base import IUserSchedulesPublisher
-from app.client.service.infrastructure.user.reco_profile import UserPersonalBooksRecoProfileCache, UserRecoKeys
+from app.user.api.events.user.personal_reco import UserPersonalRecoEVENT
+from app.user.db.postgres.repositories.sqlalchemy.user_event import UserEventSQLAlchemyREPO
+from app.user.service.infrastructure.taskiq.schedules.user.base import IUserSchedulesPublisher
+from app.user.service.infrastructure.user.reco_profile import UserPersonalBooksRecoProfileCache, UserRecoKeys
 from app.core.config.client.user.personal_book_reco import VECTOR_FLAG_TTL
 from app.product.db.postgres.repositories.sqlalchemy.book import BookSQLAlchemyREPO
 from app.shared.db.postgres.repositories.sqlalchemy.transaction import SQLAlchemyTransaction
 from app.shared.service.infrastructure.redis.clients import RedisClient
-from app.client.db.postgres.models import USER_EVENT_WEIGHTS, UserEventENUM, UserEventModel
+from app.user.db.postgres.models import USER_EVENT_WEIGHTS, UserEventENUM, UserEventModel
 from app.shared.service.infrastructure.redis.clients import RedisClient
 
 logger = logging.getLogger(__name__)

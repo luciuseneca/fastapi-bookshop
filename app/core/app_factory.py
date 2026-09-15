@@ -17,10 +17,10 @@ from app.shared.db.elasticsearch.indexes.initializer import ElasticIndexInitiali
 from app.shared.db.qdrant.collections.intializer import QdrantCollectionInitializer
 from app.shared.service.infrastructure.dishka.base import get_container
 from app.shared.service.infrastructure.rabbitmq.connection import close_rabbitmq
-from app.client.api.routers.user import user_router
-from app.client.api.routers.token import jwt_router
-from app.client.api.routers.ouath import oauth_router
-from app.client.api.routers.pages import client_pages_router
+from app.user.api.routers.user import user_router
+from app.user.api.routers.token import jwt_router
+from app.user.api.routers.ouath import oauth_router
+from app.user.api.routers.pages import client_pages_router
 from app.product.api.routers import book_router
 from app.product.api.routers.review import book_review_router
 from app.product.api.routers.pages import product_pages_router

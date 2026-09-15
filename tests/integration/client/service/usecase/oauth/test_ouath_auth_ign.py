@@ -1,8 +1,8 @@
 import pytest
-from app.client.api.requests.user.google_oauth import UserOauthREQT
-from app.client.exception.user.oauth import GoogleAccountSecurityERR, OAuthProviderMismatchERR
-from app.client.service.infrastructure.jwt.decode import jwt_decode
-from app.client.db.postgres.models import OAuthProviderENUM
+from app.user.api.requests.user.google_oauth import UserOauthREQT
+from app.user.exception.user.oauth import GoogleAccountSecurityERR, OAuthProviderMismatchERR
+from app.user.service.infrastructure.jwt.decode import jwt_decode
+from app.user.db.postgres.models import OAuthProviderENUM
 from app.core.config.client.test.dto import user_google_test_conf
 
 @pytest.mark.asyncio

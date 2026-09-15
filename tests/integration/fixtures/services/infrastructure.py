@@ -1,9 +1,9 @@
 import pytest
 import pytest_asyncio
-from app.client.service.infrastructure.jwt.refresh_session import JWTRefreshAuthSession
-from app.client.service.infrastructure.otp.auth_session import OtpAuthSession
+from app.user.service.infrastructure.jwt.refresh_session import JWTRefreshAuthSession
+from app.user.service.infrastructure.otp.auth_session import OtpAuthSession
 from app.core.config.base import get_settings
-from app.client.service.infrastructure.jwt.generator import JWTGenerator
+from app.user.service.infrastructure.jwt.generator import JWTGenerator
 from app.shared.service.infrastructure.redis.clients import RedisClient
 
 # client

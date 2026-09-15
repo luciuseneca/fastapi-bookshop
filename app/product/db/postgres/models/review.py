@@ -9,7 +9,7 @@ from app.core.db.models.mixins import IDMixin, TimestampMixin
 from app.core.db.models.base import Base
 
 if TYPE_CHECKING:
-    from app.client.db.postgres.models import ClientModel
+    from app.user.db.postgres.models import UserModel
     from app.product.db.postgres.models.book import BookModel
 
 class ReviewModel(Base, IDMixin, TimestampMixin):
@@ -31,7 +31,7 @@ class ReviewModel(Base, IDMixin, TimestampMixin):
     )
 
     # ORM relations
-    user: Mapped["ClientModel"] = relationship(back_populates="reviews")
+    user: Mapped["UserModel"] = relationship(back_populates="reviews")
     book: Mapped["BookModel"] = relationship(back_populates="reviews")
 
     def __str__(self):

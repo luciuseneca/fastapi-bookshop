@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 from sqlalchemy import or_, select, func
 from sqlalchemy.dialects.postgresql import insert
-from app.client.db.postgres.models import UserEventENUM, UserEventModel
+from app.user.db.postgres.models import UserEventENUM, UserEventModel
 from app.order.db.models.order import OrderItemModel
 from app.order.db.models.wishlist import WishlistModel
 from app.product.db.postgres.models.book import BookModel, BookPopularityStatsModel

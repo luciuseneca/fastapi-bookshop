@@ -4,7 +4,7 @@ from app.core.config.base import get_settings
 from app.core.config.client.jwt.refresh_session_time import jwt_refresh_session_time_conf
 
 @pytest.mark.asyncio
-@patch("app.client.service.usecase.user.logout.jwt_decode")
+@patch("app.user.service.usecase.user.logout.jwt_decode")
 async def test_user_logout_from_device_success(
     mock_jwt_decode,
     user_logout_usecase,
@@ -36,7 +36,7 @@ async def test_user_logout_from_device_success(
 
 
 @pytest.mark.asyncio
-@patch("app.client.service.usecase.user.logout.jwt_decode")
+@patch("app.user.service.usecase.user.logout.jwt_decode")
 async def test_user_logout_from_all_devices_success(
     mock_jwt_decode,
     user_logout_usecase,

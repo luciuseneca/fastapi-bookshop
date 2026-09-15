@@ -3,8 +3,8 @@ from fastapi import Request
 from sqlalchemy import select
 from app.core.config.base import get_settings
 from app.core.db.postgres import db_helper
-from app.client.service.infrastructure.user.check_password import user_check_password
-from app.client.db.postgres.models import ClientModel, ClientRoleENUM
+from app.user.service.infrastructure.user.check_password import user_check_password
+from app.user.db.postgres.models import UserModel, UserRoleENUM
 
 class AdminAuth(AuthenticationBackend):
     async def login(self, request: Request) -> bool:
@@ -23,7 +23,7 @@ class AdminAuth(AuthenticationBackend):
                 return False
             if not user.is_active:
                 return False
-            if user.role != ClientRoleENUM.ADMIN:
+            if user.role != UserRoleENUM.ADMIN:
                 return False
             if not user_check_password(
                 password,
@@ -49,7 +49,7 @@ class AdminAuth(AuthenticationBackend):
 
         async with db_helper.session_factory() as session:
             user = await session.get(
-                ClientModel,
+                UserModel,
                 int(admin_id)
             )
 
@@ -57,7 +57,7 @@ class AdminAuth(AuthenticationBackend):
                 return False
             if not user.is_active:
                 return False
-            if user.role != ClientRoleENUM.ADMIN:
+            if user.role != UserRoleENUM.ADMIN:
                 return False
         return True
 
@@ -65,10 +65,10 @@ class AdminAuth(AuthenticationBackend):
         self,
         session,
         email: str
-    ) -> ClientModel | None:
+    ) -> UserModel | None:
         result = await session.execute(
-            select(ClientModel)
-            .where(ClientModel.email == email)
+            select(UserModel)
+            .where(UserModel.email == email)
         )
         return result.scalar_one_or_none()
 

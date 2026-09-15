@@ -5,7 +5,7 @@ import httpx
 from elasticsearch import AsyncElasticsearch
 from sqlalchemy.ext.asyncio import AsyncSession
 from qdrant_client import AsyncQdrantClient
-from app.client.db.qdrant.collections.user_reco_profile import UserRecoProfileQdrantCollection
+from app.user.db.qdrant.collections.user_reco_profile import UserRecoProfileQdrantCollection
 from app.core.config.base import Settings, get_settings
 from app.core.config.shared.qdrant.embedding import BGE_M3_EMBEDDING_MODEL
 from app.core.db.postgres import DatabaseHelper

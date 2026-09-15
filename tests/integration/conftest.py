@@ -17,7 +17,7 @@ from dishka.integrations.fastapi import setup_dishka
 from app.product.container import BookProvider
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.shared.container import DBProvider, TestDBProvider
-from app.client.container import ClientProvider
+from app.user.container import ClientProvider
 
 from tests.integration.fixtures.models import *
 from tests.integration.fixtures.repositories import *

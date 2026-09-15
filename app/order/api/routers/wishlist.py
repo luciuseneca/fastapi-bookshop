@@ -3,10 +3,10 @@ from fastapi import (
     Depends,
     status,
 )
-from app.client.api.events.user.personal_reco import UserPersonalRecoEVENT
-from app.client.api.requests.user.auth import UserAuthorizedREQT
-from app.client.db.postgres.models import UserEventENUM
-from app.client.service.infrastructure.rabbitmq.producer.reco_events import publish_user_personal_books_reco_rmq_safe
+from app.user.api.events.user.personal_reco import UserPersonalRecoEVENT
+from app.user.api.requests.user.auth import UserAuthorizedREQT
+from app.user.db.postgres.models import UserEventENUM
+from app.user.service.infrastructure.rabbitmq.producer.reco_events import publish_user_personal_books_reco_rmq_safe
 from app.product.db.postgres.repositories.sqlalchemy.book import BookSQLAlchemyREPO
 from app.core.db.postgres import SessionDependency
 from app.order.db.sqlalchemy.repositories.cart import CartItemSQLAlchemyRepository, CartSQLAlchemyRepository
@@ -16,8 +16,8 @@ from app.order.usecase.query_handlers.wishlist.filter import WishlistFilterQH
 from app.order.usecase.wishlist.add_item import AddBookToWishlist
 from app.order.usecase.wishlist.remove_item import RemoveBookFromWishlist
 from app.shared.db.postgres.repositories.sqlalchemy.transaction import SQLAlchemyTransaction
-from app.client.api.dependencies import auth_client
-from app.client.db.postgres.repositories.sqlalchemy import UserSQLAlchemyREPO
+from app.user.api.dependencies import auth_client
+from app.user.db.postgres.repositories.sqlalchemy import UserSQLAlchemyREPO
 
 wishlist_router = APIRouter(prefix="/wishlist", tags=["❤️ Избранное"])
 

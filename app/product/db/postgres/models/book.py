@@ -24,7 +24,7 @@ from app.core.db.models.base import Base
 from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
-    from app.client.db.postgres.models import ClientModel
+    from app.user.db.postgres.models import UserModel
     from app.order.db.models.order import OrderItemModel
     from app.product.db.postgres.models.author import AuthorModel
     from app.product.db.postgres.models.category import BookCategoryModel
@@ -231,7 +231,7 @@ class BookModel(Base, IDMixin, TimestampMixin):
         lazy="raise",
     )
 
-    wishlisted_by: Mapped[list["ClientModel"]] = relationship(
+    wishlisted_by: Mapped[list["UserModel"]] = relationship(
         secondary="wishlists",
         back_populates="wishlist",
         lazy="raise",

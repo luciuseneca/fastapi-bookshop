@@ -1,7 +1,7 @@
 import pytest
-from app.client.api.requests.user.google_oauth import UserOauthREQT
-from app.client.api.requests.user.login import UserLoginREQT
-from app.client.api.requests.user.register import UserRegisterREQT
+from app.user.api.requests.user.google_oauth import UserOauthREQT
+from app.user.api.requests.user.login import UserLoginREQT
+from app.user.api.requests.user.register import UserRegisterREQT
 from app.core.config.client.test.dto import user_test_conf, user_google_test_conf
 
 # client

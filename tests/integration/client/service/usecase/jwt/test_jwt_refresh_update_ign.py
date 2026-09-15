@@ -1,10 +1,10 @@
 import pytest
-from app.client.dto.jwt.refresh import JWTRefreshTokenDTO
-from app.client.exception.jwt.replay_detected import JwtRefreshReplayDetectedERR
+from app.user.dto.jwt.refresh import JWTRefreshTokenDTO
+from app.user.exception.jwt.replay_detected import JwtRefreshReplayDetectedERR
 from app.core.config.base import get_settings
 from app.core.config.client.jwt.refresh_session_time import jwt_refresh_session_time_conf
 from app.core.config.client.jwt.roles import AUTHORIZED_USER
-from app.client.service.infrastructure.jwt.decode import jwt_decode
+from app.user.service.infrastructure.jwt.decode import jwt_decode
 
 settings = get_settings()
 

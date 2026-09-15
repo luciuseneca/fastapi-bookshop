@@ -1,4 +1,4 @@
-from app.client.db.postgres.models import ClientModel
+from app.user.db.postgres.models import UserModel
 from app.product.db.postgres.models import (
     BookModel,
     BookCategoryModel,

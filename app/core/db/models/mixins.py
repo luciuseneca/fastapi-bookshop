@@ -7,7 +7,7 @@ from sqlalchemy.orm import (
 )
 
 if TYPE_CHECKING:
-    from app.client.db.postgres.models import ClientModel
+    from app.user.db.postgres.models import UserModel
 
 class UserRelationMixin:
     _user_id_nullable: bool = False
@@ -19,8 +19,8 @@ class UserRelationMixin:
         return mapped_column(ForeignKey("users.id"), unique=cls._user_id_unique, nullable=cls._user_id_nullable)
     
     @declared_attr
-    def user(cls) -> Mapped["ClientModel"]:
-        return relationship("ClientModel", back_populates=cls._user_back_populates)
+    def user(cls) -> Mapped["UserModel"]:
+        return relationship("UserModel", back_populates=cls._user_back_populates)
     
 
 class IDMixin:

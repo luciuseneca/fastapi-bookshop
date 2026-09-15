@@ -5,8 +5,8 @@ from sse_starlette.sse import EventSourceResponse
 
 from app.agents.api.requests import AgentChatREQT
 from app.agents.service import AgentChatService
-from app.client.api.dependencies import auth_client
-from app.client.api.requests.user.auth import UserAuthorizedREQT
+from app.user.api.dependencies import auth_client
+from app.user.api.requests.user.auth import UserAuthorizedREQT
 
 agent_router = APIRouter(prefix="/agent", tags=["🤖 ИИ Консультант"])
 

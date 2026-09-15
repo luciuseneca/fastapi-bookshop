@@ -15,8 +15,8 @@ from app.core.config.product.test.paper.dto import paper_dto_test_conf
 from app.core.config.product.test.made_in.dto import made_in_dto_test_conf
 from app.core.config.product.test.review.dto import review_dto_test_conf
 from app.core.config.client.test.dto import user_test_conf, user_google_test_conf, user_github_test_conf
-from app.client.service.infrastructure.user.check_password import user_hash_password
-from app.client.db.postgres.models import ClientModel
+from app.user.service.infrastructure.user.check_password import user_hash_password
+from app.user.db.postgres.models import UserModel
 
 # product
 @pytest_asyncio.fixture
@@ -100,7 +100,7 @@ async def book_db(
 # client
 @pytest_asyncio.fixture
 async def user_db(db_session):
-    user = ClientModel(
+    user = UserModel(
         email=user_test_conf.email,
         username=user_test_conf.username,
         password=user_hash_password(user_test_conf.password),
@@ -118,7 +118,7 @@ async def user_db(db_session):
 
 @pytest_asyncio.fixture
 async def inactive_user_db(db_session):
-    user = ClientModel(
+    user = UserModel(
         email=user_test_conf.email,
         username=user_test_conf.username,
         password=user_hash_password(user_test_conf.password),
@@ -136,7 +136,7 @@ async def inactive_user_db(db_session):
 
 @pytest_asyncio.fixture
 async def google_user_db(db_session):
-    user = ClientModel(
+    user = UserModel(
         email=user_google_test_conf.email,
         username=user_google_test_conf.username,
         password=None,
@@ -154,7 +154,7 @@ async def google_user_db(db_session):
 
 @pytest_asyncio.fixture
 async def github_user_db(db_session):
-    user = ClientModel(
+    user = UserModel(
         email=user_github_test_conf.email,
         username=user_github_test_conf.username,
         password=None,

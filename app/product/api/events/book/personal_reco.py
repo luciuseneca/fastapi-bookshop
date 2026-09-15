@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from app.client.db.postgres.models import UserEventENUM
+from app.user.db.postgres.models import UserEventENUM
 
 class BookPersonalRecoEVENT(BaseModel):
     type: UserEventENUM

@@ -77,8 +77,8 @@ class ChatModel(Base, IDMixin, TimestampMixin):
         index=True,
     )
 
-    user = relationship("ClientModel", foreign_keys=[user_id], back_populates="chats")
-    manager = relationship("ClientModel", foreign_keys=[manager_id], back_populates="managed_chats")
+    user = relationship("UserModel", foreign_keys=[user_id], back_populates="chats")
+    manager = relationship("UserModel", foreign_keys=[manager_id], back_populates="managed_chats")
 
     messages = relationship(
         "ChatMessageModel",

@@ -1,12 +1,12 @@
 import pytest
-from app.client.api.requests.user.auth import UserAuthConfirmREQT
-from app.client.exception.otp.expire import OtpExpiredERR
-from app.client.exception.otp.invalid import OtpInvalidERR
-from app.client.service.infrastructure.otp.auth_session import otp_generate_session_id
+from app.user.api.requests.user.auth import UserAuthConfirmREQT
+from app.user.exception.otp.expire import OtpExpiredERR
+from app.user.exception.otp.invalid import OtpInvalidERR
+from app.user.service.infrastructure.otp.auth_session import otp_generate_session_id
 from app.core.config.client.otp.test.dto import otp_test_conf
-from app.client.dto.otp.base import OtpDTO
-from app.client.exception.user.exists import UserNotFoundERR
-from app.client.service.infrastructure.jwt.decode import jwt_decode
+from app.user.dto.otp.base import OtpDTO
+from app.user.exception.user.exists import UserNotFoundERR
+from app.user.service.infrastructure.jwt.decode import jwt_decode
 from app.core.config.base import get_settings
 
 settings = get_settings()
