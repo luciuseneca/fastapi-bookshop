@@ -2,13 +2,23 @@
 
 ## Быстрый старт
 
+Для запуска на чистом компьютере сначала выполните полную
+[инструкцию первого запуска](docs/first-run.md). В частности, установите и
+запустите Ollama, загрузите модели `bge-m3` и `llama3.1:8b`, создайте `.env` и
+JWT-ключи. Python, Poetry и базы данных на хост устанавливать не нужно.
+
 Если проект уже запускался до добавления постоянных томов Redis/RabbitMQ,
 сначала выполните [однократный переход](#однократный-переход-с-прежней-конфигурации).
 
 ```bash
 cp .env.example .env   # заполнить секреты (пароли, ключи Stripe/OAuth/LLM)
 # положить JWT-ключи в ./cert (jwt-private.pem, jwt-public.pem)
-docker compose up --build
+ollama pull bge-m3
+ollama pull llama3.1:8b
+docker compose build
+docker compose up -d postgres redis rabbitmq elasticsearch qdrant
+docker compose run --rm fastapi python -m app.cli init-db
+docker compose up -d
 ```
 
 Приложение: http://127.0.0.1:8000. Инфраструктурные порты (postgres 5432,
