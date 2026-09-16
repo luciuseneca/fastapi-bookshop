@@ -3,7 +3,7 @@ from app.user.api.requests.customer.auth import CustomerAuthConfirmREQT
 from app.user.exception.otp.expire import OtpExpiredERR
 from app.user.exception.otp.invalid import OtpInvalidERR
 from app.user.service.infrastructure.otp.auth_session import otp_generate_session_id
-from app.core.config.client.otp.test.dto import otp_test_conf
+from app.core.config.user.otp.test.dto import otp_test_conf
 from app.user.dto.otp.base import OtpDTO
 from app.user.exception.customer.exists import CustomerNotFoundERR
 from app.user.service.infrastructure.jwt.decode import jwt_decode

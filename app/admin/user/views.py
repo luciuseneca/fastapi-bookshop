@@ -1,15 +1,21 @@
 from datetime import datetime
 from sqladmin import ModelView
 from sqladmin.filters import BooleanFilter, OperationColumnFilter
-from app.admin.client.filters import ClientRoleFilterAdmin, OauthProviderFilterAdmin
+from app.admin.user.filters import UserRoleFilterAdmin, OauthProviderFilterAdmin
 from app.admin.column_type_formatters import datetime_format
 from app.user.db.postgres.models import UserModel
 
-class ClientAdmin(ModelView, model=UserModel):
-    name = "Client"
-    name_plural = "Clients"
+class UserAdmin(ModelView, model=UserModel):
+    """Manage user accounts in the admin interface.
+
+    Configure the displayed fields, role filters, and editable account
+    attributes for the user model.
+    """
+
+    name = "User"
+    name_plural = "Users"
     icon = "fa-solid fa-user"
-    identity = "client"
+    identity = "user"
 
     column_labels = {
         UserModel.is_active: "is active",
@@ -39,7 +45,7 @@ class ClientAdmin(ModelView, model=UserModel):
     column_sortable_list = [UserModel.id, UserModel.created_at]
     column_filters = [
         OauthProviderFilterAdmin(),
-        ClientRoleFilterAdmin(),
+        UserRoleFilterAdmin(),
         BooleanFilter(UserModel.is_active),
         OperationColumnFilter(UserModel.email),
     ]

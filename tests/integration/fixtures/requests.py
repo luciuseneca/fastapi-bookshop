@@ -2,9 +2,9 @@ import pytest
 from app.user.api.requests.customer.google_oauth import CustomerOauthREQT
 from app.user.api.requests.customer.login import CustomerLoginREQT
 from app.user.api.requests.customer.register import CustomerRegisterREQT
-from app.core.config.client.test.dto import user_test_conf, user_google_test_conf
+from app.core.config.user.test.dto import user_test_conf, user_google_test_conf
 
-# client
+# user
 @pytest.fixture
 def user_login_reqt():
     return CustomerLoginREQT(

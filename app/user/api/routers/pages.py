@@ -10,5 +10,5 @@ async def auth_page(request: Request):
     """Вход / регистрация с подтверждением по OTP."""
     return templates.TemplateResponse(
         request=request,
-        name="client/auth.html",
+        name="user/auth.html",
     )

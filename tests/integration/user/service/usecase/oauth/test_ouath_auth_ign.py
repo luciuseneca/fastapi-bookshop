@@ -3,7 +3,7 @@ from app.user.api.requests.customer.google_oauth import CustomerOauthREQT
 from app.user.exception.customer.oauth import GoogleAccountSecurityERR, OAuthProviderMismatchERR
 from app.user.service.infrastructure.jwt.decode import jwt_decode
 from app.user.db.postgres.models import OAuthProviderENUM
-from app.core.config.client.test.dto import user_google_test_conf
+from app.core.config.user.test.dto import user_google_test_conf
 
 @pytest.mark.asyncio
 async def test_google_auth_create_new_user(

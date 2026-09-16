@@ -8,8 +8,8 @@ from app.user.dto.otp.base import OtpDTO
 from app.user.service.infrastructure.otp.auth_session import otp_generate_session_id
 from app.core.config.base import get_settings
 from app.user.service.infrastructure.customer.check_password import user_check_password
-from app.core.config.client.otp.test.dto import otp_test_conf
-from app.core.config.client.test.dto import user_test_conf
+from app.core.config.user.otp.test.dto import otp_test_conf
+from app.core.config.user.test.dto import user_test_conf
 
 settings = get_settings()
 

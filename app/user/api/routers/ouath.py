@@ -7,10 +7,10 @@ from app.user.api.cookies import set_auth_cookies
 from app.user.exception.customer.oauth import GoogleEmailNotVerifiedERR
 from app.user.service.usecase.ouath.google_authorization import CustomerGoogleAuthorizationUC
 from app.user.service.infrastructure.oauth.google.base import oauth
-from app.core.config.client.oauth.google_request_callback import GOOGLE_REQUEST_CALLBACK_CONF
-from app.core.config.client.oauth.google_scope import GOOGLE_SCOPE_CONF
-from app.core.config.client.oauth.google_token_payload_fields import GOOGLE_TOKEN_EMAIL_VERIFIED_CONF, GOOGLE_TOKEN_USERINFO_CONF, GOOGLE_TOKEN_USERINFO_EMAIL_CONF, GOOGLE_TOKEN_USERINFO_OAUTH_ID_CONF, GOOGLE_TOKEN_USERINFO_USERNAME_CONF
-from app.core.config.client.oauth.router_urls import GOOGLE_CALLBACK_URL_CONF, GOOGLE_LOGIN_URL_CONF, OAUTH_BASE_URL_CONF
+from app.core.config.user.oauth.google_request_callback import GOOGLE_REQUEST_CALLBACK_CONF
+from app.core.config.user.oauth.google_scope import GOOGLE_SCOPE_CONF
+from app.core.config.user.oauth.google_token_payload_fields import GOOGLE_TOKEN_EMAIL_VERIFIED_CONF, GOOGLE_TOKEN_USERINFO_CONF, GOOGLE_TOKEN_USERINFO_EMAIL_CONF, GOOGLE_TOKEN_USERINFO_OAUTH_ID_CONF, GOOGLE_TOKEN_USERINFO_USERNAME_CONF
+from app.core.config.user.oauth.router_urls import GOOGLE_CALLBACK_URL_CONF, GOOGLE_LOGIN_URL_CONF, OAUTH_BASE_URL_CONF
 
 oauth_router = APIRouter(
     prefix=OAUTH_BASE_URL_CONF,

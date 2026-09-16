@@ -8,7 +8,7 @@ from app.user.service.domain.customer.validate.exists import is_user_found
 from app.user.service.domain.customer.make_oauth import user_make_is_google
 from app.user.service.domain.customer.validate.is_oauth import is_not_oauth_user
 from app.user.service.infrastructure.jwt.refresh_session import JWTRefreshAuthSession
-from app.core.config.client.jwt.refresh_session_time import jwt_refresh_session_time_conf
+from app.core.config.user.jwt.refresh_session_time import jwt_refresh_session_time_conf
 from app.user.service.infrastructure.jwt.decode import jwt_decode
 from app.user.service.infrastructure.jwt.generator import JWTGenerator
 from app.shared.db.postgres.repositories.sqlalchemy.transaction import SQLAlchemyTransaction

@@ -4,8 +4,8 @@ from app.user.dto.jwt.refresh import JWTRefreshTokenDTO
 from app.user.exception.jwt.invalid import JwtInvalidERR
 from app.user.exception.jwt.replay_detected import JwtRefreshReplayDetectedERR
 from app.user.service.infrastructure.jwt.refresh_session import JWTRefreshAuthSession
-from app.core.config.client.jwt.refresh_session_time import jwt_refresh_session_time_conf
-from app.core.config.client.jwt.roles import client_role_to_jwt_role
+from app.core.config.user.jwt.refresh_session_time import jwt_refresh_session_time_conf
+from app.core.config.user.jwt.roles import client_role_to_jwt_role
 from app.user.service.infrastructure.jwt.decode import jwt_decode
 from app.user.service.infrastructure.jwt.generator import JWTGenerator
 

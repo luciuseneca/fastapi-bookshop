@@ -1,7 +1,7 @@
 from app.user.db.postgres.models import UserRoleENUM, OAuthProviderENUM
 
-class ClientRoleFilterAdmin:
-    title = "Client Role"
+class UserRoleFilterAdmin:
+    title = "User Role"
     parameter_name = "role"
 
     def lookups(self, request, model, run_query) -> list[tuple[str, str]]:

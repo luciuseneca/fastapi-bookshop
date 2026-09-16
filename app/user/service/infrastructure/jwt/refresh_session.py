@@ -1,7 +1,7 @@
 import time
 from app.core.config.base import get_settings
 from app.shared.service.infrastructure.redis.clients import RedisClient
-from app.core.config.client.jwt.refresh_session_time import jwt_refresh_user_session_conf, jwt_refresh_user_sessions_conf
+from app.core.config.user.jwt.refresh_session_time import jwt_refresh_user_session_conf, jwt_refresh_user_sessions_conf
 
 class JWTRefreshAuthSession:
     def __init__(

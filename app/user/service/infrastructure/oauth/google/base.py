@@ -1,6 +1,6 @@
 from authlib.integrations.starlette_client import OAuth
 from app.core.config.base import get_settings
-from app.core.config.client.oauth.google_client_kwargs import GOOGLE_CLIENT_KWARGS_CONF
+from app.core.config.user.oauth.google_client_kwargs import GOOGLE_CLIENT_KWARGS_CONF
 
 settings = get_settings()
 oauth = OAuth()

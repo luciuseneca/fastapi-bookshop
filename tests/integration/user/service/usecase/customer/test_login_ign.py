@@ -3,8 +3,8 @@ from unittest.mock import patch
 from app.user.exception.otp.expire import OtpNotExpiredERR
 from app.user.exception.customer.invalid_creds import CustomerInvalidCredentialsERR
 from app.user.service.infrastructure.otp.auth_session import otp_generate_session_id
-from app.core.config.client.test.dto import user_test_conf
-from app.core.config.client.otp.test.dto import otp_test_conf
+from app.core.config.user.test.dto import user_test_conf
+from app.core.config.user.otp.test.dto import otp_test_conf
 from app.user.dto.otp.base import OtpDTO
 from app.core.config.base import get_settings
 

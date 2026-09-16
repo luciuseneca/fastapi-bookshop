@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from app.user.service.infrastructure.taskiq.schedules.customer.update_customer_recs_vector import update_user_reco_books_profile_schedule
-from app.core.config.client.customer.personal_book_reco import VECTOR_UPDATE_DELAY
+from app.core.config.user.customer.personal_book_reco import VECTOR_UPDATE_DELAY
 
 class ICustomerSchedulesPublisher(ABC):
     @abstractmethod

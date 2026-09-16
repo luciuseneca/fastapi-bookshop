@@ -1,4 +1,4 @@
-from app.core.config.client.jwt.httponly_cookie import (
+from app.core.config.user.jwt.httponly_cookie import (
     JWT_REFRESH_COOKIE_LIFETIME_CONF,
 )
 

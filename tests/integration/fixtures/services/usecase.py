@@ -6,7 +6,7 @@ from app.user.service.usecase.customer.authorization import CustomerAuthorizatio
 from app.user.service.usecase.customer.logout import CustomerLogoutUC
 from app.core.config.base import get_settings
 
-# client
+# user
 @pytest_asyncio.fixture(scope="function")
 def user_authentication_usecase(
     transaction,

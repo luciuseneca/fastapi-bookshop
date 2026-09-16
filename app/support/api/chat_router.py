@@ -12,7 +12,7 @@ from app.user.api.cookies import set_auth_cookies
 from app.user.api.dependencies import auth_user_ws
 from app.user.api.responses.jwt.access import JwtAccessTokenRESP
 from app.user.db.postgres.models import UserModel
-from app.core.config.client.jwt.roles import AUTHORIZED_MANAGER, AUTHORIZED_USER
+from app.core.config.user.jwt.roles import AUTHORIZED_MANAGER, AUTHORIZED_USER
 from app.core.config.shared.redis.pubsub.listen_expired_keys import LISTEN_EXPIRED_KEYS_CHANNEL
 from app.core.config.support.redis.cache.customer_schat import chat_schat_cache_key, user_chat_cache_key
 from app.core.config.support.redis.keys.schat_active_msg import user_active_msg_chat_key

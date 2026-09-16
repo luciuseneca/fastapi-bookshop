@@ -12,8 +12,8 @@ from app.user.service.domain.customer.validate.is_active import is_user_active
 from app.user.service.infrastructure.jwt.refresh_session import JWTRefreshAuthSession
 from app.user.service.infrastructure.otp.auth_session import OtpAuthSession
 from app.core.config.base import Settings
-from app.core.config.client.jwt.refresh_session_time import jwt_refresh_session_time_conf
-from app.core.config.client.jwt.roles import AUTHORIZED_USER
+from app.core.config.user.jwt.refresh_session_time import jwt_refresh_session_time_conf
+from app.core.config.user.jwt.roles import AUTHORIZED_USER
 from app.shared.service.infrastructure.base import is_exists
 from app.user.service.infrastructure.jwt.decode import jwt_decode
 from app.user.dto.otp.base import OtpDTO

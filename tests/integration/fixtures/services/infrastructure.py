@@ -6,7 +6,7 @@ from app.core.config.base import get_settings
 from app.user.service.infrastructure.jwt.generator import JWTGenerator
 from app.shared.service.infrastructure.redis.clients import RedisClient
 
-# client
+# user
 @pytest_asyncio.fixture(scope="function")
 async def otp_auth_session(redis_connection):
     settings = get_settings()

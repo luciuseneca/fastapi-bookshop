@@ -3,7 +3,7 @@ from app.user.api.events.customer.personal_reco import CustomerPersonalRecoEVENT
 from app.user.db.postgres.repositories.sqlalchemy.customer_event import CustomerEventSQLAlchemyREPO
 from app.user.service.infrastructure.taskiq.schedules.customer.base import ICustomerSchedulesPublisher
 from app.user.service.infrastructure.customer.reco_profile import CustomerPersonalBooksRecoProfileCache, CustomerRecoKeys
-from app.core.config.client.customer.personal_book_reco import VECTOR_FLAG_TTL
+from app.core.config.user.customer.personal_book_reco import VECTOR_FLAG_TTL
 from app.product.db.postgres.repositories.sqlalchemy.book import BookSQLAlchemyREPO
 from app.shared.db.postgres.repositories.sqlalchemy.transaction import SQLAlchemyTransaction
 from app.shared.service.infrastructure.redis.clients import RedisClient

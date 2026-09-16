@@ -1,5 +1,5 @@
-from app.admin.client.views import ClientAdmin
-from app.admin.client.event_views import CustomerEventAdmin
+from app.admin.user.views import UserAdmin
+from app.admin.user.event_views import CustomerEventAdmin
 from app.admin.product.views.author import AuthorAdmin
 from app.admin.product.views.book import BookAdmin
 from app.admin.product.views.category import CategoryBookAdmin
@@ -18,8 +18,8 @@ from app.admin.order.views.wishlist import WishlistAdmin
 from app.admin.support.views import ChatAdmin, ChatMessageAdmin
 
 ADMIN_VIEWS = [
-    # client
-    ClientAdmin,
+    # user
+    UserAdmin,
     CustomerEventAdmin,
 
     # product

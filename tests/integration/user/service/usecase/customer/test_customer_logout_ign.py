@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import patch
 from app.core.config.base import get_settings
-from app.core.config.client.jwt.refresh_session_time import jwt_refresh_session_time_conf
+from app.core.config.user.jwt.refresh_session_time import jwt_refresh_session_time_conf
 
 @pytest.mark.asyncio
 @patch("app.user.service.usecase.customer.logout.jwt_decode")

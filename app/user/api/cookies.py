@@ -2,8 +2,8 @@ import secrets
 
 from fastapi import Response
 
-from app.core.config.client.jwt.csrf import CSRF_COOKIE_CONF
-from app.core.config.client.jwt.httponly_cookie import JWT_REFRESH_COOKIE_CONF
+from app.core.config.user.jwt.csrf import CSRF_COOKIE_CONF
+from app.core.config.user.jwt.httponly_cookie import JWT_REFRESH_COOKIE_CONF
 
 
 def generate_csrf_token() -> str:

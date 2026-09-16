@@ -8,10 +8,10 @@ from app.user.api.requests.customer.auth import CustomerAuthorizedREQT
 from app.user.exception.jwt.csrf import CsrfTokenInvalidERR
 from app.user.exception.jwt.forbidden import JwtRoleForbiddenERR
 from app.user.exception.jwt.invalid import JwtInvalidERR
-from app.core.config.client.jwt.csrf import CSRF_COOKIE_NAME, CSRF_HEADER_NAME
+from app.core.config.user.jwt.csrf import CSRF_COOKIE_NAME, CSRF_HEADER_NAME
 from app.user.service.infrastructure.jwt.validate.is_valid_access import is_valid_jwt_access_token
 from app.core.config.base import get_settings
-from app.core.config.client.jwt.roles import AUTHORIZED_MANAGER, AUTHORIZED_USER
+from app.core.config.user.jwt.roles import AUTHORIZED_MANAGER, AUTHORIZED_USER
 from app.core.config.shared.api.auth_headers import AUTHORIZATION_BEARER_FIELD_CONF, AUTHORIZATION_REQUEST_FIELD_CONF
 from app.user.service.infrastructure.jwt.decode import jwt_decode
 

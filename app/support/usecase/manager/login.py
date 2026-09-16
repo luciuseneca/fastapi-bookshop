@@ -6,8 +6,8 @@ from app.user.service.infrastructure.jwt.decode import jwt_decode
 from app.user.service.infrastructure.jwt.generator import JWTGenerator
 from app.user.service.infrastructure.jwt.refresh_session import JWTRefreshAuthSession
 from app.user.service.infrastructure.customer.check_password import user_check_password
-from app.core.config.client.jwt.refresh_session_time import jwt_refresh_session_time_conf
-from app.core.config.client.jwt.roles import AUTHORIZED_MANAGER
+from app.core.config.user.jwt.refresh_session_time import jwt_refresh_session_time_conf
+from app.core.config.user.jwt.roles import AUTHORIZED_MANAGER
 from app.support.api.requests.manager_login import ManagerLoginREQT
 from app.support.db.sqlalchemy.repositories.manager import ManagerSQLAlchemyRepository
 

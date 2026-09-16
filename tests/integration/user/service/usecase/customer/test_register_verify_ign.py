@@ -7,7 +7,7 @@ from app.user.dto.otp.base import OtpDTO
 from app.user.exception.customer.exists import CustomerNotFoundERR
 from app.user.service.infrastructure.jwt.decode import jwt_decode
 from app.core.config.base import get_settings
-from app.core.config.client.otp.test.dto import otp_test_conf
+from app.core.config.user.otp.test.dto import otp_test_conf
 
 settings = get_settings()
 

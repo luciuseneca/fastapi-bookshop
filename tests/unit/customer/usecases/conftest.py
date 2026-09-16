@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import AsyncMock, Mock
 from app.user.api.requests.customer.login import CustomerLoginREQT
 from app.user.service.usecase.customer.authentication import CustomerAuthenticationUC
-from app.core.config.client.test.dto import user_test_conf
+from app.core.config.user.test.dto import user_test_conf
 
 @pytest.fixture
 def user_authentication_usecase(fake_user_repository, fake_otp_repository):

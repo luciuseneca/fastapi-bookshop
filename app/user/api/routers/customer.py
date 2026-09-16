@@ -12,7 +12,7 @@ from app.user.service.usecase.customer.authentication import CustomerAuthenticat
 from app.user.service.usecase.customer.authorization import CustomerAuthorizationUC
 from app.user.service.usecase.customer.logout import CustomerLogoutUC
 from app.user.api.responses.customer.succes_otp_send import succes_otp_sending_to_email_resp
-from app.core.config.client.customer.router_urls import USER_BASE_URL_CONF, USER_LOGIN_URL_CONF, USER_LOGIN_VERIFY_URL_CONF, USER_LOGOUT_ALL_URL_CONF, USER_LOGOUT_URL_CONF, USER_REGISTER_URL_CONF, USER_REGISTER_VERIFY_URL_CONF
+from app.core.config.user.customer.router_urls import USER_BASE_URL_CONF, USER_LOGIN_URL_CONF, USER_LOGIN_VERIFY_URL_CONF, USER_LOGOUT_ALL_URL_CONF, USER_LOGOUT_URL_CONF, USER_REGISTER_URL_CONF, USER_REGISTER_VERIFY_URL_CONF
 
 user_router = APIRouter(
     prefix=USER_BASE_URL_CONF,

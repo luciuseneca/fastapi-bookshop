@@ -13,7 +13,7 @@ from app.user.db.qdrant.repositories.customer.reco_profile import CustomerRecoPr
 from app.user.dto.customer.reco_profile import CustomerRecoProfileDTO
 from app.user.dto.customer.qdrant_reco_profile_payload import CustomerRecoProfileQdrantPayloadDTO
 from app.user.service.infrastructure.taskiq.schedules.customer.base import ICustomerSchedulesPublisher
-from app.core.config.client.customer.personal_book_reco import (
+from app.core.config.user.customer.personal_book_reco import (
     MAX_INTERACTED_BOOKS_FOR_VECTOR,
     VECTOR_FLAG_TTL,
     VECTOR_LOCK_TTL,

@@ -6,7 +6,7 @@ from app.user.api.responses.jwt.access import JwtAccessTokenRESP
 from dishka.integrations.fastapi import inject
 from app.user.exception.jwt.replay_detected import JwtRefreshReplayDetectedERR
 from app.user.service.usecase.jwt.refresh_update import JwtRefreshTokenUpdateUC
-from app.core.config.client.jwt.router_urls import JWT_BASE_URL_CONF, JWT_REFRESH_URL_CONF
+from app.core.config.user.jwt.router_urls import JWT_BASE_URL_CONF, JWT_REFRESH_URL_CONF
 
 jwt_router = APIRouter(
     prefix=JWT_BASE_URL_CONF,
