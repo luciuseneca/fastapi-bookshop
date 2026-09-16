@@ -1,11 +1,11 @@
 from dishka import FromDishka
 from fastapi import APIRouter, Request
 from fastapi.responses import RedirectResponse
-from app.user.api.requests.user.google_oauth import UserOauthREQT
+from app.user.api.requests.customer.google_oauth import CustomerOauthREQT
 from dishka.integrations.fastapi import inject
 from app.user.api.cookies import set_auth_cookies
-from app.user.exception.user.oauth import GoogleEmailNotVerifiedERR
-from app.user.service.usecase.ouath.google_authorization import UserGoogleAuthorizationUC
+from app.user.exception.customer.oauth import GoogleEmailNotVerifiedERR
+from app.user.service.usecase.ouath.google_authorization import CustomerGoogleAuthorizationUC
 from app.user.service.infrastructure.oauth.google.base import oauth
 from app.core.config.client.oauth.google_request_callback import GOOGLE_REQUEST_CALLBACK_CONF
 from app.core.config.client.oauth.google_scope import GOOGLE_SCOPE_CONF
@@ -38,7 +38,7 @@ async def google_login_router(request: Request):
 @inject
 async def google_callback_router(
     request: Request,
-    google: FromDishka[UserGoogleAuthorizationUC],
+    google: FromDishka[CustomerGoogleAuthorizationUC],
 ):
     token = await oauth.google.authorize_access_token(request)
     userinfo = token[GOOGLE_TOKEN_USERINFO_CONF]
@@ -46,7 +46,7 @@ async def google_callback_router(
     if not userinfo[GOOGLE_TOKEN_EMAIL_VERIFIED_CONF]:
         raise GoogleEmailNotVerifiedERR()
 
-    user_data = UserOauthREQT(
+    user_data = CustomerOauthREQT(
         email=userinfo[GOOGLE_TOKEN_USERINFO_EMAIL_CONF],
         oauth_id=userinfo[GOOGLE_TOKEN_USERINFO_OAUTH_ID_CONF],
         username=userinfo[GOOGLE_TOKEN_USERINFO_USERNAME_CONF],

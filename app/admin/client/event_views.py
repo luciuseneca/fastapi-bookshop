@@ -1,17 +1,17 @@
 from datetime import datetime
 from sqladmin import ModelView
 from app.admin.column_type_formatters import datetime_format
-from app.user.db.postgres.models import UserEventENUM, UserEventModel
+from app.user.db.postgres.models import CustomerEventENUM, CustomerEventModel
 
 
-class UserEventTypeFilter:
+class CustomerEventTypeFilter:
     title = "Event Type"
     parameter_name = "event_type"
 
     def lookups(self, request, model, run_query) -> list[tuple[str, str]]:
         return [
             (event.value, event.value.replace("_", " ").capitalize())
-            for event in UserEventENUM
+            for event in CustomerEventENUM
         ]
 
     async def get_filtered_query(self, stmt, value, model):
@@ -21,9 +21,9 @@ class UserEventTypeFilter:
         return stmt
 
 
-class UserEventAdmin(ModelView, model=UserEventModel):
-    name = "User Event"
-    name_plural = "User Events"
+class CustomerEventAdmin(ModelView, model=CustomerEventModel):
+    name = "Customer Event"
+    name_plural = "Customer Events"
     icon = "fa-solid fa-chart-line"
     identity = "user_event"
 
@@ -34,14 +34,14 @@ class UserEventAdmin(ModelView, model=UserEventModel):
     admin_ignored_fields = []
 
     column_labels = {
-        UserEventModel.user_id: "user ID",
-        UserEventModel.book_id: "book ID",
-        UserEventModel.event_type: "event type",
-        UserEventModel.category_id: "category ID",
-        UserEventModel.author_id: "author ID",
-        UserEventModel.metada: "metadata",
-        UserEventModel.created_at: "created at",
-        UserEventModel.updated_at: "updated at",
+        CustomerEventModel.user_id: "user ID",
+        CustomerEventModel.book_id: "book ID",
+        CustomerEventModel.event_type: "event type",
+        CustomerEventModel.category_id: "category ID",
+        CustomerEventModel.author_id: "author ID",
+        CustomerEventModel.metada: "metadata",
+        CustomerEventModel.created_at: "created at",
+        CustomerEventModel.updated_at: "updated at",
     }
     column_type_formatters = {
         datetime: datetime_format
@@ -49,37 +49,37 @@ class UserEventAdmin(ModelView, model=UserEventModel):
 
     # list
     column_list = [
-        UserEventModel.id,
-        UserEventModel.user_id,
-        UserEventModel.book_id,
-        UserEventModel.event_type,
-        UserEventModel.weight,
-        UserEventModel.created_at,
+        CustomerEventModel.id,
+        CustomerEventModel.user_id,
+        CustomerEventModel.book_id,
+        CustomerEventModel.event_type,
+        CustomerEventModel.weight,
+        CustomerEventModel.created_at,
     ]
     column_searchable_list = [
-        UserEventModel.id,
-        UserEventModel.user_id,
-        UserEventModel.book_id,
+        CustomerEventModel.id,
+        CustomerEventModel.user_id,
+        CustomerEventModel.book_id,
     ]
     column_sortable_list = [
-        UserEventModel.weight,
-        UserEventModel.created_at,
+        CustomerEventModel.weight,
+        CustomerEventModel.created_at,
     ]
-    column_filters = [UserEventTypeFilter()]
+    column_filters = [CustomerEventTypeFilter()]
 
     page_size = 25
     page_size_options = [25, 50, 100, 200]
 
     # detail
     column_details_list = [
-        UserEventModel.id,
-        UserEventModel.user_id,
-        UserEventModel.book_id,
-        UserEventModel.event_type,
-        UserEventModel.metada,
-        UserEventModel.category_id,
-        UserEventModel.author_id,
-        UserEventModel.weight,
-        UserEventModel.created_at,
-        UserEventModel.updated_at,
+        CustomerEventModel.id,
+        CustomerEventModel.user_id,
+        CustomerEventModel.book_id,
+        CustomerEventModel.event_type,
+        CustomerEventModel.metada,
+        CustomerEventModel.category_id,
+        CustomerEventModel.author_id,
+        CustomerEventModel.weight,
+        CustomerEventModel.created_at,
+        CustomerEventModel.updated_at,
     ]

@@ -5,18 +5,18 @@ from dishka import (
 )
 from qdrant_client import AsyncQdrantClient
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.user.db.postgres.repositories.sqlalchemy import UserSQLAlchemyREPO
-from app.user.db.postgres.repositories.sqlalchemy.user_event import UserEventSQLAlchemyREPO
-from app.user.db.qdrant.collections.user_reco_profile import UserRecoProfileQdrantCollection
+from app.user.db.postgres.repositories.sqlalchemy import CustomerSQLAlchemyREPO
+from app.user.db.postgres.repositories.sqlalchemy.customer_event import CustomerEventSQLAlchemyREPO
+from app.user.db.qdrant.collections.customer_reco_profile import CustomerRecoProfileQdrantCollection
 from app.user.service.infrastructure.jwt.refresh_session import JWTRefreshAuthSession
 from app.user.service.infrastructure.otp.auth_session import OtpAuthSession
-from app.user.db.qdrant.repositories.user.reco_profile import UserRecoProfileQdrantREPO
-from app.user.service.infrastructure.taskiq.schedules.user.base import UserTaskiqSchedulesPublisher
-from app.user.service.infrastructure.user.reco_profile import UserPersonalBooksRecoProfile, UserPersonalBooksRecoProfileCache, UserProfileUpdateProcess, UserRecoProfileEmbeddingTextBuilder
+from app.user.db.qdrant.repositories.customer.reco_profile import CustomerRecoProfileQdrantREPO
+from app.user.service.infrastructure.taskiq.schedules.customer.base import CustomerTaskiqSchedulesPublisher
+from app.user.service.infrastructure.customer.reco_profile import CustomerPersonalBooksRecoProfile, CustomerPersonalBooksRecoProfileCache, CustomerProfileUpdateProcess, CustomerRecoProfileEmbeddingTextBuilder
 from app.user.service.usecase.jwt.refresh_update import JwtRefreshTokenUpdateUC
-from app.user.service.usecase.user import UserAuthenticationUC, UserAuthorizationUC
-from app.user.service.usecase.ouath.google_authorization import UserGoogleAuthorizationUC
-from app.user.service.usecase.user.logout import UserLogoutUC
+from app.user.service.usecase.customer import CustomerAuthenticationUC, CustomerAuthorizationUC
+from app.user.service.usecase.ouath.google_authorization import CustomerGoogleAuthorizationUC
+from app.user.service.usecase.customer.logout import CustomerLogoutUC
 from app.core.config.base import Settings
 from app.user.service.infrastructure.jwt.generator import JWTGenerator
 from app.product.db.postgres.repositories.sqlalchemy.author import BookAuthorSQLAlchemyREPO
@@ -37,15 +37,15 @@ class ClientProvider(Provider):
     def user_alchemy_repo(
         self,
         session: AsyncSession,
-    ) -> UserSQLAlchemyREPO:
-        return UserSQLAlchemyREPO(session)
+    ) -> CustomerSQLAlchemyREPO:
+        return CustomerSQLAlchemyREPO(session)
     
     @provide
     def user_event_alchemy_repo(
         self,
         session: AsyncSession,
-    ) -> UserEventSQLAlchemyREPO:
-        return UserEventSQLAlchemyREPO(session)
+    ) -> CustomerEventSQLAlchemyREPO:
+        return CustomerEventSQLAlchemyREPO(session)
     
     # ----
     # UC
@@ -54,11 +54,11 @@ class ClientProvider(Provider):
     def user_authentication_uc(
         self,
         transaction: SQLAlchemyTransaction,
-        user_repository: UserSQLAlchemyREPO,
+        user_repository: CustomerSQLAlchemyREPO,
         otp_auth_session: OtpAuthSession,
         settings: Settings,
-    ) -> UserAuthenticationUC:
-        return UserAuthenticationUC(
+    ) -> CustomerAuthenticationUC:
+        return CustomerAuthenticationUC(
             transaction=transaction,
             user_repository=user_repository,
             otp_auth_session=otp_auth_session,
@@ -69,13 +69,13 @@ class ClientProvider(Provider):
     def user_authorization_uc(
         self,
         transaction: SQLAlchemyTransaction,
-        user_repository: UserSQLAlchemyREPO,
+        user_repository: CustomerSQLAlchemyREPO,
         otp_auth_session: OtpAuthSession,
         jwt_refresh_session: JWTRefreshAuthSession,
         jwt_generator: JWTGenerator,
         settings: Settings,
-    ) -> UserAuthorizationUC:
-        return UserAuthorizationUC(
+    ) -> CustomerAuthorizationUC:
+        return CustomerAuthorizationUC(
             transaction=transaction,
             user_repository=user_repository,
             otp_auth_session=otp_auth_session,
@@ -88,11 +88,11 @@ class ClientProvider(Provider):
     def user_google_authorization_uc(
         self,
         transaction: SQLAlchemyTransaction,
-        user_repository: UserSQLAlchemyREPO,
+        user_repository: CustomerSQLAlchemyREPO,
         jwt_generator: JWTGenerator,
         jwt_refresh_session: JWTRefreshAuthSession,
-    ) -> UserGoogleAuthorizationUC:
-        return UserGoogleAuthorizationUC(
+    ) -> CustomerGoogleAuthorizationUC:
+        return CustomerGoogleAuthorizationUC(
             transaction=transaction,
             user_repository=user_repository,
             jwt_generator=jwt_generator,
@@ -103,15 +103,15 @@ class ClientProvider(Provider):
     def user_logout_uc(
         self,
         jwt_refresh_session: JWTRefreshAuthSession,
-    ) -> UserLogoutUC:
-        return UserLogoutUC(jwt_refresh_session=jwt_refresh_session)
+    ) -> CustomerLogoutUC:
+        return CustomerLogoutUC(jwt_refresh_session=jwt_refresh_session)
     
     @provide
     def jwt_refresh_token_update_uc(
         self,
         jwt_refresh_session: JWTRefreshAuthSession,
         jwt_generator: JWTGenerator,
-        user_repository: UserSQLAlchemyREPO,
+        user_repository: CustomerSQLAlchemyREPO,
     ) -> JwtRefreshTokenUpdateUC:
         return JwtRefreshTokenUpdateUC(
             jwt_generator=jwt_generator,
@@ -148,32 +148,32 @@ class ClientProvider(Provider):
     def user_personal_books_reco_profile_cache(
         self,
         redis: RedisClient,
-    ) -> UserPersonalBooksRecoProfileCache:
-        return UserPersonalBooksRecoProfileCache(redis=redis)
+    ) -> CustomerPersonalBooksRecoProfileCache:
+        return CustomerPersonalBooksRecoProfileCache(redis=redis)
     
     @provide
     def user_reco_profile_qdrant_point_repo(
         self,
         qdrant_client: AsyncQdrantClient,
-    ) -> UserRecoProfileQdrantREPO:
-        return UserRecoProfileQdrantREPO(qdrant_client=qdrant_client)
+    ) -> CustomerRecoProfileQdrantREPO:
+        return CustomerRecoProfileQdrantREPO(qdrant_client=qdrant_client)
     
     @provide
     def user_personal_books_reco_profile(
         self,
         embedder: OllamaEmbedder,
-        user_profile_cache: UserPersonalBooksRecoProfileCache,
-        user_event_repository: UserEventSQLAlchemyREPO,
+        user_profile_cache: CustomerPersonalBooksRecoProfileCache,
+        user_event_repository: CustomerEventSQLAlchemyREPO,
         book_repository: BookSQLAlchemyREPO,
         book_author_repository: BookAuthorSQLAlchemyREPO,
         book_category_repository: BookCategorySQLAlchemyREPO,
-        schedule_publisher: UserTaskiqSchedulesPublisher,
-        user_reco_profile_qdrant_repo: UserRecoProfileQdrantREPO,
+        schedule_publisher: CustomerTaskiqSchedulesPublisher,
+        user_reco_profile_qdrant_repo: CustomerRecoProfileQdrantREPO,
         books_qdrant_repo: BooksQdrantREPO,
-        user_profile_update_locker: UserProfileUpdateProcess,
-        user_reco_embed_text: UserRecoProfileEmbeddingTextBuilder,
-    ) -> UserPersonalBooksRecoProfile:
-        return UserPersonalBooksRecoProfile(
+        user_profile_update_locker: CustomerProfileUpdateProcess,
+        user_reco_embed_text: CustomerRecoProfileEmbeddingTextBuilder,
+    ) -> CustomerPersonalBooksRecoProfile:
+        return CustomerPersonalBooksRecoProfile(
             embedder=embedder,
             schedule_publisher=schedule_publisher,
             user_profile_cache=user_profile_cache,
@@ -191,20 +191,20 @@ class ClientProvider(Provider):
     def user_profile_update_locker(
         self,
         redis: RedisClient,
-    ) -> UserProfileUpdateProcess:
-        return UserProfileUpdateProcess(redis=redis)
+    ) -> CustomerProfileUpdateProcess:
+        return CustomerProfileUpdateProcess(redis=redis)
     
     @provide
-    def user_profile_embed_text_builder(self) -> UserRecoProfileEmbeddingTextBuilder:
-        return UserRecoProfileEmbeddingTextBuilder()
+    def user_profile_embed_text_builder(self) -> CustomerRecoProfileEmbeddingTextBuilder:
+        return CustomerRecoProfileEmbeddingTextBuilder()
     
     @provide
-    def user_taskiq_schedules_publisher(self) -> UserTaskiqSchedulesPublisher:
-        return UserTaskiqSchedulesPublisher()
+    def user_taskiq_schedules_publisher(self) -> CustomerTaskiqSchedulesPublisher:
+        return CustomerTaskiqSchedulesPublisher()
     
     @provide(scope=Scope.APP)
     def user_reco_profile_qdrant_collection(
         self,
         qdrant_client: AsyncQdrantClient,
-    ) -> UserRecoProfileQdrantCollection:
-        return UserRecoProfileQdrantCollection(qdrant_client=qdrant_client)
+    ) -> CustomerRecoProfileQdrantCollection:
+        return CustomerRecoProfileQdrantCollection(qdrant_client=qdrant_client)

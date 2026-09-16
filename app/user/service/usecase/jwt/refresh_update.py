@@ -1,4 +1,4 @@
-from app.user.db.postgres.repositories.sqlalchemy import UserSQLAlchemyREPO
+from app.user.db.postgres.repositories.sqlalchemy import CustomerSQLAlchemyREPO
 from app.user.dto.jwt.access import JWTAccessTokenDTO
 from app.user.dto.jwt.refresh import JWTRefreshTokenDTO
 from app.user.exception.jwt.invalid import JwtInvalidERR
@@ -14,7 +14,7 @@ class JwtRefreshTokenUpdateUC:
         self,
         jwt_refresh_session: JWTRefreshAuthSession,
         jwt_generator: JWTGenerator,
-        user_repository: UserSQLAlchemyREPO,
+        user_repository: CustomerSQLAlchemyREPO,
     ):
         self.jwt_generator = jwt_generator
         self.jwt_refresh_session = jwt_refresh_session

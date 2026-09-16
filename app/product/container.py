@@ -6,11 +6,11 @@ from dishka import (
 from elasticsearch import AsyncElasticsearch
 from qdrant_client import AsyncQdrantClient
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.user.db.postgres.repositories.sqlalchemy import UserSQLAlchemyREPO
-from app.user.db.postgres.repositories.sqlalchemy.user_event import UserEventSQLAlchemyREPO
-from app.user.db.qdrant.repositories.user.reco_profile import UserRecoProfileQdrantREPO
-from app.user.service.infrastructure.taskiq.schedules.user.base import UserTaskiqSchedulesPublisher
-from app.user.service.infrastructure.user.reco_profile import UserPersonalBooksRecoProfile, UserPersonalBooksRecoProfileCache, UserProfileUpdateProcess
+from app.user.db.postgres.repositories.sqlalchemy import CustomerSQLAlchemyREPO
+from app.user.db.postgres.repositories.sqlalchemy.customer_event import CustomerEventSQLAlchemyREPO
+from app.user.db.qdrant.repositories.customer.reco_profile import CustomerRecoProfileQdrantREPO
+from app.user.service.infrastructure.taskiq.schedules.customer.base import CustomerTaskiqSchedulesPublisher
+from app.user.service.infrastructure.customer.reco_profile import CustomerPersonalBooksRecoProfile, CustomerPersonalBooksRecoProfileCache, CustomerProfileUpdateProcess
 from app.core.db.postgres import DatabaseHelper
 from app.product.db.postgres.repositories.sqlalchemy.author import BookAuthorSQLAlchemyREPO
 from app.product.db.postgres.repositories.sqlalchemy.book import BookSQLAlchemyREPO
@@ -37,7 +37,7 @@ from app.product.service.infrastructure.query_handlers.book.main_reco import (
     BooksMainRecommendationsQH,
 )
 from app.product.service.infrastructure.query_handlers.review.filter import BookReviewFilterQH
-from app.product.service.usecase.book.personal_reco import BookPersonalRecoForUserUC
+from app.product.service.usecase.book.personal_reco import BookPersonalRecoForCustomerUC
 from app.product.service.usecase.review.write import WriteReview
 from app.shared.db.postgres.repositories.sqlalchemy.transaction import SQLAlchemyTransaction
 from app.shared.service.infrastructure.ollama.embedder import OllamaEmbedder
@@ -62,7 +62,7 @@ class BookProvider(Provider):
         self,
         db_helper: DatabaseHelper,
         books_qdrant_repo: BooksQdrantREPO,
-        user_reco_profile_qdrant_repo: UserRecoProfileQdrantREPO,
+        user_reco_profile_qdrant_repo: CustomerRecoProfileQdrantREPO,
         cold_candidates: BookColdCandidatesProvider,
     ) -> BookPersonalizedReco:
         return BookPersonalizedReco(
@@ -113,7 +113,7 @@ class BookProvider(Provider):
     @provide
     def blender_feed_uc(
         self,
-        user_reco_profile: UserPersonalBooksRecoProfile,
+        user_reco_profile: CustomerPersonalBooksRecoProfile,
         personalized_source: BookPersonalizedReco,
         popular_source: BookMainPopularReco,
         new_books_source: BookMainNewReco,
@@ -176,13 +176,13 @@ class BookProvider(Provider):
     def book_generator_personal_reco_uc(
         self,
         redis: RedisClient,
-        user_profile_cache: UserPersonalBooksRecoProfileCache,
+        user_profile_cache: CustomerPersonalBooksRecoProfileCache,
         transaction: SQLAlchemyTransaction,
         book_repository: BookSQLAlchemyREPO,
-        user_event_repository: UserEventSQLAlchemyREPO,
-        schedule_publisher: UserTaskiqSchedulesPublisher,
-    ) -> BookPersonalRecoForUserUC:
-        return BookPersonalRecoForUserUC(
+        user_event_repository: CustomerEventSQLAlchemyREPO,
+        schedule_publisher: CustomerTaskiqSchedulesPublisher,
+    ) -> BookPersonalRecoForCustomerUC:
+        return BookPersonalRecoForCustomerUC(
             redis=redis,
             transaction=transaction,
             schedule_publisher=schedule_publisher,
@@ -266,7 +266,7 @@ class BookReviewProvider(Provider):
         self,
         transaction: SQLAlchemyTransaction,
         book_repository: BookSQLAlchemyREPO,
-        user_repository: UserSQLAlchemyREPO,
+        user_repository: CustomerSQLAlchemyREPO,
         review_repository: BookReviewSQLAlchemyREPO,
     ) -> WriteReview:
         return WriteReview(

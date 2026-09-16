@@ -14,7 +14,7 @@ from app.user.api.responses.jwt.access import JwtAccessTokenRESP
 from app.user.db.postgres.models import UserModel
 from app.core.config.client.jwt.roles import AUTHORIZED_MANAGER, AUTHORIZED_USER
 from app.core.config.shared.redis.pubsub.listen_expired_keys import LISTEN_EXPIRED_KEYS_CHANNEL
-from app.core.config.support.redis.cache.user_schat import chat_schat_cache_key, user_chat_cache_key
+from app.core.config.support.redis.cache.customer_schat import chat_schat_cache_key, user_chat_cache_key
 from app.core.config.support.redis.keys.schat_active_msg import user_active_msg_chat_key
 from app.core.config.support.redis.keys.schat_manager_lock import SCHAT_MANAGER_LOCK_TTL, schat_manager_lock_key
 from app.core.config.support.redis.pubsub import schat_channel, schat_user_kick_channel
@@ -38,7 +38,7 @@ from app.support.exceptions.manager import (
     ManagerNotAssigned,
     ManagerNotFound,
 )
-from app.support.exceptions.message import SChatUserMuted, TooManySChatMessages
+from app.support.exceptions.message import SChatCustomerMuted, TooManySChatMessages
 from app.support.service import ManagerChatService, ManagerReplyTemplateService
 from app.support.usecase.close import CloseChatUC
 from app.support.usecase.escalation import ChatEscalationUC
@@ -209,7 +209,7 @@ async def support_chat_user_ws(
                             reason=err.msg,
                         )
                         break
-                    except (TooManySChatMessages, SChatUserMuted) as err:
+                    except (TooManySChatMessages, SChatCustomerMuted) as err:
                         await websocket.send_text(
                             to_json({
                                 WSMessageKeysEnum.TYPE: WSMessageTypeEnum.ERROR,

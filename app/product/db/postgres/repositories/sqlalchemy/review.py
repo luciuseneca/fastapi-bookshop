@@ -5,7 +5,7 @@ from sqlalchemy.orm import joinedload
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.product.db.postgres.models.book import BookModel
 from app.product.db.postgres.models.review import ReviewModel
-from app.product.dto.review.filter_by_user_and_book import BookReviewOFUser
+from app.product.dto.review.filter_by_customer_and_book import BookReviewOFCustomer
 from app.shared.api.requests.offset_pagination import OffsetPagination
 from app.shared.db.postgres.repositories.sqlalchemy.repository import BaseSQLAlchemyREPO
 from app.shared.dto.page_pagintaion import PagePaginationResult
@@ -61,7 +61,7 @@ class BookReviewSQLAlchemyREPO(BaseSQLAlchemyREPO[ReviewModel]):
         result = await self.session.execute(stmt)
         return result.scalars().all()
 
-    async def get_by_book_and_user_id(self, filters: BookReviewOFUser) -> ReviewModel | None:
+    async def get_by_book_and_user_id(self, filters: BookReviewOFCustomer) -> ReviewModel | None:
         stmt = select(self.model).where(
             self.model.book_id == filters.book_id,
             self.model.user_id == filters.user_id,

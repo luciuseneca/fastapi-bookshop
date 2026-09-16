@@ -10,9 +10,9 @@ from enum import StrEnum
 from app.shared.service.infrastructure.redis.clients import RedisClient
 from qdrant_client.models import ScoredPoint
 from sqlalchemy import Row, and_, or_, select
-from app.user.db.qdrant.repositories.user.reco_profile import UserRecoProfileQdrantREPO
-from app.user.dto.user.reco_profile import UserRecoProfileDTO
-from app.user.service.infrastructure.user.reco_profile import UserPersonalBooksRecoProfile
+from app.user.db.qdrant.repositories.customer.reco_profile import CustomerRecoProfileQdrantREPO
+from app.user.dto.customer.reco_profile import CustomerRecoProfileDTO
+from app.user.service.infrastructure.customer.reco_profile import CustomerPersonalBooksRecoProfile
 from app.core.db.postgres import DatabaseHelper
 from app.product.db.postgres.models.book import BookModel
 from app.product.db.postgres.repositories.sqlalchemy.book import (
@@ -503,7 +503,7 @@ class BookMainNewReco:
         self,
         limit: int,
         cursor: BookMainRecoCursorDTO,
-        profile: UserRecoProfileDTO,
+        profile: CustomerRecoProfileDTO,
         excluded_ids: list[int],
         impressed_ids: set[int] | None = None,
     ) -> tuple[list[int], int | None]:
@@ -697,7 +697,7 @@ class BookPersonalizedReco:
         self,
         db_helper: DatabaseHelper,
         books_qdrant_repo: BooksQdrantREPO,
-        user_reco_profile_qdrant_repo: UserRecoProfileQdrantREPO,
+        user_reco_profile_qdrant_repo: CustomerRecoProfileQdrantREPO,
         cold_candidates: BookColdCandidatesProvider,
     ):
         self._db_helper = db_helper
@@ -710,7 +710,7 @@ class BookPersonalizedReco:
         user_id: int,
         limit: int,
         cursor: BookMainRecoCursorDTO,
-        profile: UserRecoProfileDTO,
+        profile: CustomerRecoProfileDTO,
         excluded_ids: list[int],
         impressed_ids: set[int] | None = None,
     ) -> tuple[list[int], BookPersonalizedRecoStatusDTO]:
@@ -905,7 +905,7 @@ class BookPersonalizedReco:
     @staticmethod
     def _rerank(
         points: list[ScoredPoint],
-        profile: UserRecoProfileDTO,
+        profile: CustomerRecoProfileDTO,
         category_boost: float = 0.15,
         author_boost: float = 0.10,
     ) -> list[ScoredPoint]:
@@ -1007,7 +1007,7 @@ class BookPersonalizedReco:
         limit: int,
         cursor: BookMainRecoCursorDTO,
         excluded_ids: list[int],
-        profile: UserRecoProfileDTO,
+        profile: CustomerRecoProfileDTO,
         impressed_ids: set[int],
     ) -> list[int]:
         """
@@ -1183,7 +1183,7 @@ EXPLORATION_LIMIT = SLOT_COUNTS[FeedSlot.EXPLORATION]
 class BooksMainRecommendationsQH:
     def __init__(
         self,
-        user_reco_profile: UserPersonalBooksRecoProfile,
+        user_reco_profile: CustomerPersonalBooksRecoProfile,
         book_repository: BookSQLAlchemyREPO,
         book_reco_session: BookMainRecoSeenSession,
         personalized: BookPersonalizedReco,

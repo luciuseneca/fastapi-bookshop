@@ -1,13 +1,13 @@
 import pytest
-from app.user.api.requests.user.google_oauth import UserOauthREQT
-from app.user.api.requests.user.login import UserLoginREQT
-from app.user.api.requests.user.register import UserRegisterREQT
+from app.user.api.requests.customer.google_oauth import CustomerOauthREQT
+from app.user.api.requests.customer.login import CustomerLoginREQT
+from app.user.api.requests.customer.register import CustomerRegisterREQT
 from app.core.config.client.test.dto import user_test_conf, user_google_test_conf
 
 # client
 @pytest.fixture
 def user_login_reqt():
-    return UserLoginREQT(
+    return CustomerLoginREQT(
         email=user_test_conf.email,
         password=user_test_conf.password,
     )
@@ -15,7 +15,7 @@ def user_login_reqt():
 
 @pytest.fixture
 def user_register_reqt():
-    return UserRegisterREQT(
+    return CustomerRegisterREQT(
         email=user_test_conf.email,
         username=user_test_conf.username,
         password=user_test_conf.password,
@@ -24,7 +24,7 @@ def user_register_reqt():
 
 @pytest.fixture
 def user_google_reqt():
-    return UserOauthREQT(
+    return CustomerOauthREQT(
         email=user_google_test_conf.email,
         username=user_google_test_conf.username,
         oauth_id=user_google_test_conf.oauth_id,

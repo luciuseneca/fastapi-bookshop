@@ -3,17 +3,17 @@ from dataclasses import dataclass
 from app.user.db.postgres.models import OAuthProviderENUM
 
 @dataclass(frozen=True, slots=True)
-class UserTestConf:
+class CustomerTestConf:
     email: str = "test@example.com"
     username: str = "Test"
     password: str = "Hashedpassword12345&"
     is_active: bool = True
 
-user_test_conf = UserTestConf()
+user_test_conf = CustomerTestConf()
 
 
 @dataclass(frozen=True, slots=True)
-class UserGoogleTestConf:
+class CustomerGoogleTestConf:
     email: str = "testgoogle@example.com"
     username: str = "Test Google"
     password: str | None = None
@@ -21,11 +21,11 @@ class UserGoogleTestConf:
     oauth_id: str = "google-test-oauth-id-123"
     is_active: bool = True
 
-user_google_test_conf = UserGoogleTestConf()
+user_google_test_conf = CustomerGoogleTestConf()
 
 
 @dataclass(frozen=True, slots=True)
-class UserGithubTestConf:
+class CustomerGithubTestConf:
     email: str = "testgithub@example.com"
     username: str = "Test Github"
     password: str | None = None
@@ -33,4 +33,4 @@ class UserGithubTestConf:
     oauth_id: str = "github-test-oauth-id-123"
     is_active: bool = True
 
-user_github_test_conf = UserGithubTestConf()
+user_github_test_conf = CustomerGithubTestConf()

@@ -9,7 +9,7 @@ from sqlalchemy.orm import (
 if TYPE_CHECKING:
     from app.user.db.postgres.models import UserModel
 
-class UserRelationMixin:
+class CustomerRelationMixin:
     _user_id_nullable: bool = False
     _user_id_unique: bool = True
     _user_back_populates: str | None = None

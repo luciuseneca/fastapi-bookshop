@@ -1,6 +1,6 @@
 import pytest
-from app.user.api.requests.user.google_oauth import UserOauthREQT
-from app.user.exception.user.oauth import GoogleAccountSecurityERR, OAuthProviderMismatchERR
+from app.user.api.requests.customer.google_oauth import CustomerOauthREQT
+from app.user.exception.customer.oauth import GoogleAccountSecurityERR, OAuthProviderMismatchERR
 from app.user.service.infrastructure.jwt.decode import jwt_decode
 from app.user.db.postgres.models import OAuthProviderENUM
 from app.core.config.client.test.dto import user_google_test_conf
@@ -50,7 +50,7 @@ async def test_google_auth_convert_local_user_to_google(
     user_db,
     user_repository,
 ):
-    user_data = UserOauthREQT(
+    user_data = CustomerOauthREQT(
         email=user_db.email,
         username=user_db.username,
         oauth_id=user_google_test_conf.oauth_id,
@@ -67,7 +67,7 @@ async def test_google_auth_invalid_oauth_id(
     user_google_authorization_usecase,
     google_user_db,
 ):
-    user_data = UserOauthREQT(
+    user_data = CustomerOauthREQT(
         email=google_user_db.email,
         username=google_user_db.username,
         oauth_id="wrong-google-id",
@@ -82,7 +82,7 @@ async def test_google_auth_provider_mismatch(
     user_google_authorization_usecase,
     github_user_db,
 ):
-    user_data = UserOauthREQT(
+    user_data = CustomerOauthREQT(
         email=github_user_db.email,
         username=github_user_db.username,
         oauth_id=user_google_test_conf.oauth_id,

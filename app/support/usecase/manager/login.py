@@ -1,11 +1,11 @@
 from app.user.dto.jwt.access import JWTAccessTokenDTO
 from app.user.dto.jwt.pair import JWTTokensDTO
 from app.user.dto.jwt.refresh import JWTRefreshTokenDTO
-from app.user.exception.user.invalid_creds import UserInvalidCredentialsERR
+from app.user.exception.customer.invalid_creds import CustomerInvalidCredentialsERR
 from app.user.service.infrastructure.jwt.decode import jwt_decode
 from app.user.service.infrastructure.jwt.generator import JWTGenerator
 from app.user.service.infrastructure.jwt.refresh_session import JWTRefreshAuthSession
-from app.user.service.infrastructure.user.check_password import user_check_password
+from app.user.service.infrastructure.customer.check_password import user_check_password
 from app.core.config.client.jwt.refresh_session_time import jwt_refresh_session_time_conf
 from app.core.config.client.jwt.roles import AUTHORIZED_MANAGER
 from app.support.api.requests.manager_login import ManagerLoginREQT
@@ -29,7 +29,7 @@ class ManagerLoginUC:
         manager = await self.manager_repository.get_by_email(email=login_data.email)
 
         if manager is None or not manager.is_active or not manager.password:
-            raise UserInvalidCredentialsERR()
+            raise CustomerInvalidCredentialsERR()
 
         try:
             password_valid = user_check_password(
@@ -41,7 +41,7 @@ class ManagerLoginUC:
             password_valid = False
 
         if not password_valid:
-            raise UserInvalidCredentialsERR()
+            raise CustomerInvalidCredentialsERR()
 
         user_id = str(manager.id)
 

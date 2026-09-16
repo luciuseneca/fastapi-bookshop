@@ -11,7 +11,7 @@ from app.product.db.postgres.models.review import ReviewModel
 from app.support.models import pg_enum
 
 class UserRoleENUM(str, PyEnum):
-    CUSTOMER = "user"  # Persisted value kept for database and token compatibility.
+    CUSTOMER = "customer"
     MANAGER = "manager"
     ADMIN = "admin"
 
@@ -104,7 +104,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import Mapped, mapped_column
 
 
-class UserEventENUM(str, PyEnum):
+class CustomerEventENUM(str, PyEnum):
     VIEW          = "view"
     SEARCH        = "search"
     WISHLIST_ADD  = "wishlist_add"
@@ -117,21 +117,21 @@ class UserEventENUM(str, PyEnum):
     PREVIEW       = "preview"
 
 
-USER_EVENT_WEIGHTS: dict[UserEventENUM, float] = {
-    UserEventENUM.VIEW:         0.5,
-    UserEventENUM.SEARCH:       0.3,
-    UserEventENUM.WISHLIST_ADD: 1.5,
-    UserEventENUM.WISHLIST_DEL: -0.5,
-    UserEventENUM.CART_ADD:     2.0,
-    UserEventENUM.CART_REMOVE:  -0.3,
-    UserEventENUM.PURCHASE:     3.0,
-    UserEventENUM.RATING:       0.0,   # рассчитывается отдельно
-    UserEventENUM.SHARE:        1.2,
-    UserEventENUM.PREVIEW:      0.8,
+USER_EVENT_WEIGHTS: dict[CustomerEventENUM, float] = {
+    CustomerEventENUM.VIEW:         0.5,
+    CustomerEventENUM.SEARCH:       0.3,
+    CustomerEventENUM.WISHLIST_ADD: 1.5,
+    CustomerEventENUM.WISHLIST_DEL: -0.5,
+    CustomerEventENUM.CART_ADD:     2.0,
+    CustomerEventENUM.CART_REMOVE:  -0.3,
+    CustomerEventENUM.PURCHASE:     3.0,
+    CustomerEventENUM.RATING:       0.0,   # рассчитывается отдельно
+    CustomerEventENUM.SHARE:        1.2,
+    CustomerEventENUM.PREVIEW:      0.8,
 }
 
 
-class UserEventModel(Base, IDMixin, TimestampMixin):
+class CustomerEventModel(Base, IDMixin, TimestampMixin):
     """Лог всех пользовательских действий."""
     __tablename__ = "user_events"
     
@@ -147,8 +147,8 @@ class UserEventModel(Base, IDMixin, TimestampMixin):
     book_id: Mapped[int | None] = mapped_column(
         ForeignKey("books.id", ondelete="SET NULL"), nullable=True
     )
-    event_type: Mapped[UserEventENUM] = mapped_column(
-        pg_enum(UserEventENUM, name="user_event_enum"),
+    event_type: Mapped[CustomerEventENUM] = mapped_column(
+        pg_enum(CustomerEventENUM, name="user_event_enum"),
         nullable=False,
     )
     # гибкое поле: rating value, search query, session_id и т.д.

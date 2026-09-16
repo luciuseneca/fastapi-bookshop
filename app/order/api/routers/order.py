@@ -10,8 +10,8 @@ from fastapi import (
 )
 
 from app.user.api.dependencies import auth_client
-from app.user.api.requests.user.auth import UserAuthorizedREQT
-from app.user.db.postgres.repositories.sqlalchemy import UserSQLAlchemyREPO
+from app.user.api.requests.customer.auth import AuthorizedCustomerREQT
+from app.user.db.postgres.repositories.sqlalchemy import CustomerSQLAlchemyREPO
 from app.core.config.base import get_settings
 from app.core.db.postgres import SessionDependency
 from app.order.api.requests.order.create import CreateOrderREQT
@@ -39,12 +39,12 @@ order_router = APIRouter(prefix="/orders", tags=["⚜ Заказы"])
 async def purchase_books_router(
     data: CreateOrderREQT,
     session: SessionDependency,
-    user: UserAuthorizedREQT = Depends(auth_client),
+    user: AuthorizedCustomerREQT = Depends(auth_client),
 ):
     purchase = BuyBooks(
         transaction=SQLAlchemyTransaction(session),
         book_repository=BookSQLAlchemyREPO(session),
-        user_repository=UserSQLAlchemyREPO(session),
+        user_repository=CustomerSQLAlchemyREPO(session),
         order_repository=OrderSQLAlchemyRepository(session),
         payment_repository=PaymentSQLAlchemyRepository(session),
     )
@@ -60,12 +60,12 @@ async def purchase_books_router(
 )
 async def purchase_cart_router(
     session: SessionDependency,
-    user: UserAuthorizedREQT = Depends(auth_client),
+    user: AuthorizedCustomerREQT = Depends(auth_client),
 ):
     buy_books = BuyBooks(
         transaction=SQLAlchemyTransaction(session),
         book_repository=BookSQLAlchemyREPO(session),
-        user_repository=UserSQLAlchemyREPO(session),
+        user_repository=CustomerSQLAlchemyREPO(session),
         order_repository=OrderSQLAlchemyRepository(session),
         payment_repository=PaymentSQLAlchemyRepository(session),
     )

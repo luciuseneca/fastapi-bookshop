@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 from sqlalchemy import or_, select, func
 from sqlalchemy.dialects.postgresql import insert
-from app.user.db.postgres.models import UserEventENUM, UserEventModel
+from app.user.db.postgres.models import CustomerEventENUM, CustomerEventModel
 from app.order.db.models.order import OrderItemModel
 from app.order.db.models.wishlist import WishlistModel
 from app.product.db.postgres.models.book import BookModel, BookPopularityStatsModel
@@ -77,16 +77,16 @@ async def update_books_popularity() -> None:
 
             views_sq = (
                 select(
-                    UserEventModel.book_id,
-                    func.count(func.distinct(UserEventModel.user_id)).label("views"),
+                    CustomerEventModel.book_id,
+                    func.count(func.distinct(CustomerEventModel.user_id)).label("views"),
                 )
                 .where(
-                    UserEventModel.event_type == UserEventENUM.VIEW,
-                    UserEventModel.book_id.is_not(None),
-                    UserEventModel.created_at >= yesterday_start,
-                    UserEventModel.created_at < today_start,
+                    CustomerEventModel.event_type == CustomerEventENUM.VIEW,
+                    CustomerEventModel.book_id.is_not(None),
+                    CustomerEventModel.created_at >= yesterday_start,
+                    CustomerEventModel.created_at < today_start,
                 )
-                .group_by(UserEventModel.book_id)
+                .group_by(CustomerEventModel.book_id)
                 .subquery()
             )
 

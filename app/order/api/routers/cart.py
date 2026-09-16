@@ -4,9 +4,9 @@ from fastapi import (
     Query,
     status,
 )
-from app.user.api.events.user.personal_reco import UserPersonalRecoEVENT
-from app.user.api.requests.user.auth import UserAuthorizedREQT
-from app.user.db.postgres.models import UserEventENUM
+from app.user.api.events.customer.personal_reco import CustomerPersonalRecoEVENT
+from app.user.api.requests.customer.auth import AuthorizedCustomerREQT
+from app.user.db.postgres.models import CustomerEventENUM
 from app.user.service.infrastructure.rabbitmq.producer.reco_events import publish_user_personal_books_reco_rmq_safe
 from app.product.db.postgres.repositories.sqlalchemy.book import BookSQLAlchemyREPO
 from app.core.db.postgres import SessionDependency
@@ -26,7 +26,7 @@ cart_router = APIRouter(prefix="/cart", tags=["🧺 Корзина"])
 )
 async def cart_user_booklist_router(
     session: SessionDependency,
-    user: UserAuthorizedREQT = Depends(auth_client),
+    user: AuthorizedCustomerREQT = Depends(auth_client),
 ):
     repo = CartSQLAlchemyRepository(session)
     query = CartFilterQH(cart_repository=repo)
@@ -42,7 +42,7 @@ async def cart_user_booklist_router(
 async def add_item_to_cart_router(
     session: SessionDependency,
     book_id: int,
-    user: UserAuthorizedREQT = Depends(auth_client),
+    user: AuthorizedCustomerREQT = Depends(auth_client),
 ):
     cart_book = AddBookToCart(
         transaction=SQLAlchemyTransaction(session),
@@ -52,9 +52,9 @@ async def add_item_to_cart_router(
     )
     await cart_book.add(user_id=user.sub, book_id=book_id)
 
-    event = UserPersonalRecoEVENT(
+    event = CustomerPersonalRecoEVENT(
         user_id=user.sub,
-        type=UserEventENUM.CART_ADD,
+        type=CustomerEventENUM.CART_ADD,
         book_id=book_id,
     )
 
@@ -75,7 +75,7 @@ async def set_cart_item_quantity_router(
     book_id: int,
     session: SessionDependency,
     quantity: int = Query(ge=0, le=100),
-    user: UserAuthorizedREQT = Depends(auth_client),
+    user: AuthorizedCustomerREQT = Depends(auth_client),
 ):
     """quantity=0 удаляет позицию. Количество проверяется по остатку на складе."""
     set_quantity = SetCartItemQuantity(

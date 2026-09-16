@@ -4,9 +4,9 @@ from fastapi import (
     Depends,
     status,
 )
-from app.user.api.events.user.personal_reco import UserPersonalRecoEVENT
-from app.user.api.requests.user.auth import UserAuthorizedREQT
-from app.user.db.postgres.models import UserEventENUM
+from app.user.api.events.customer.personal_reco import CustomerPersonalRecoEVENT
+from app.user.api.requests.customer.auth import AuthorizedCustomerREQT
+from app.user.db.postgres.models import CustomerEventENUM
 from app.user.service.infrastructure.rabbitmq.producer.reco_events import publish_user_personal_books_reco_rmq_safe
 from app.product.api.events.book.personal_reco import RatingEventMeta
 from app.product.api.requests.review.write import ReviewWriteREQT
@@ -45,16 +45,16 @@ async def reviews_by_book_router(
 async def write_review_router(
     review_data: ReviewWriteREQT,
     write_review: FromDishka[WriteReview],
-    user: UserAuthorizedREQT = Depends(auth_client),
+    user: AuthorizedCustomerREQT = Depends(auth_client),
 ):
     await write_review.for_book(
         user=user,
         review_data=review_data,
     )
 
-    event = UserPersonalRecoEVENT(
+    event = CustomerPersonalRecoEVENT(
         user_id=user.sub,
-        type=UserEventENUM.RATING,
+        type=CustomerEventENUM.RATING,
         book_id=review_data.book_id,
         metadata=RatingEventMeta(rating=review_data.rating).model_dump(),
     )

@@ -1,10 +1,10 @@
-from app.user.api.requests.user.auth import UserAuthorizedREQT
-from app.user.db.postgres.repositories.sqlalchemy import UserSQLAlchemyREPO
-from app.user.exception.user.invalid_creds import UserInvalidCredentialsERR
+from app.user.api.requests.customer.auth import AuthorizedCustomerREQT
+from app.user.db.postgres.repositories.sqlalchemy import CustomerSQLAlchemyREPO
+from app.user.exception.customer.invalid_creds import CustomerInvalidCredentialsERR
 from app.product.db.postgres.models.review import ReviewModel
 from app.product.db.postgres.repositories.sqlalchemy.book import BookSQLAlchemyREPO
 from app.product.db.postgres.repositories.sqlalchemy.review import BookReviewSQLAlchemyREPO
-from app.product.dto.review.filter_by_user_and_book import BookReviewOFUser
+from app.product.dto.review.filter_by_customer_and_book import BookReviewOFCustomer
 from app.product.exceptions import BookNotFoundERR, BookReviewAlreadyExistsERR
 from app.product.service.domain.book.set_avg_rating import book_avg_rating
 from app.shared.service.infrastructure.base import is_exists
@@ -15,7 +15,7 @@ class WriteReview:
     def __init__(self,
         transaction: SQLAlchemyTransaction,
         review_repository: BookReviewSQLAlchemyREPO,
-        user_repository: UserSQLAlchemyREPO,
+        user_repository: CustomerSQLAlchemyREPO,
         book_repository: BookSQLAlchemyREPO,
     ):
         self._transaction = transaction
@@ -25,12 +25,12 @@ class WriteReview:
         
     async def for_book(
         self,
-        user: UserAuthorizedREQT,
+        user: AuthorizedCustomerREQT,
         review_data: ReviewWriteREQT
     ) -> None:
         user = await is_exists(
             self.user_repository.get_by_id(user.sub),
-            UserInvalidCredentialsERR(),
+            CustomerInvalidCredentialsERR(),
         )
 
         book = await is_exists(
@@ -38,7 +38,7 @@ class WriteReview:
             BookNotFoundERR(),
         )
 
-        user_book_review_data = BookReviewOFUser(
+        user_book_review_data = BookReviewOFCustomer(
             book_id=review_data.book_id,
             user_id=user.id,
         )

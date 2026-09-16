@@ -1,23 +1,23 @@
-from app.user.api.requests.user.google_oauth import UserOauthREQT
+from app.user.api.requests.customer.google_oauth import CustomerOauthREQT
 from app.user.db.postgres.models import UserModel, OAuthProviderENUM
-from app.user.db.postgres.repositories.sqlalchemy import UserSQLAlchemyREPO
+from app.user.db.postgres.repositories.sqlalchemy import CustomerSQLAlchemyREPO
 from app.user.dto.jwt.refresh import JWTRefreshTokenDTO
-from app.user.exception.user.oauth import OAuthProviderMismatchERR, GoogleAccountSecurityERR
-from app.user.service.domain.user.validate.is_google import is_google_user, is_invalid_google_account
-from app.user.service.domain.user.validate.exists import is_user_found
-from app.user.service.domain.user.make_oauth import user_make_is_google
-from app.user.service.domain.user.validate.is_oauth import is_not_oauth_user
+from app.user.exception.customer.oauth import OAuthProviderMismatchERR, GoogleAccountSecurityERR
+from app.user.service.domain.customer.validate.is_google import is_google_user, is_invalid_google_account
+from app.user.service.domain.customer.validate.exists import is_user_found
+from app.user.service.domain.customer.make_oauth import user_make_is_google
+from app.user.service.domain.customer.validate.is_oauth import is_not_oauth_user
 from app.user.service.infrastructure.jwt.refresh_session import JWTRefreshAuthSession
 from app.core.config.client.jwt.refresh_session_time import jwt_refresh_session_time_conf
 from app.user.service.infrastructure.jwt.decode import jwt_decode
 from app.user.service.infrastructure.jwt.generator import JWTGenerator
 from app.shared.db.postgres.repositories.sqlalchemy.transaction import SQLAlchemyTransaction
 
-class UserGoogleAuthorizationUC:
+class CustomerGoogleAuthorizationUC:
     def __init__(
         self,
         transaction: SQLAlchemyTransaction,
-        user_repository: UserSQLAlchemyREPO,
+        user_repository: CustomerSQLAlchemyREPO,
         jwt_generator: JWTGenerator,
         jwt_refresh_session: JWTRefreshAuthSession,
     ):
@@ -26,7 +26,7 @@ class UserGoogleAuthorizationUC:
         self.jwt_generator = jwt_generator
         self.jwt_refresh_session = jwt_refresh_session
         
-    async def authorize(self, user_data: UserOauthREQT) -> str:
+    async def authorize(self, user_data: CustomerOauthREQT) -> str:
         user = await self.user_repository.get_by_email(user_data.email)
 
         if is_user_found(user):

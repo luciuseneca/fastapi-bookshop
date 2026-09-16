@@ -3,9 +3,9 @@ from fastapi import (
     Depends,
     status,
 )
-from app.user.api.events.user.personal_reco import UserPersonalRecoEVENT
-from app.user.api.requests.user.auth import UserAuthorizedREQT
-from app.user.db.postgres.models import UserEventENUM
+from app.user.api.events.customer.personal_reco import CustomerPersonalRecoEVENT
+from app.user.api.requests.customer.auth import AuthorizedCustomerREQT
+from app.user.db.postgres.models import CustomerEventENUM
 from app.user.service.infrastructure.rabbitmq.producer.reco_events import publish_user_personal_books_reco_rmq_safe
 from app.product.db.postgres.repositories.sqlalchemy.book import BookSQLAlchemyREPO
 from app.core.db.postgres import SessionDependency
@@ -17,7 +17,7 @@ from app.order.usecase.wishlist.add_item import AddBookToWishlist
 from app.order.usecase.wishlist.remove_item import RemoveBookFromWishlist
 from app.shared.db.postgres.repositories.sqlalchemy.transaction import SQLAlchemyTransaction
 from app.user.api.dependencies import auth_client
-from app.user.db.postgres.repositories.sqlalchemy import UserSQLAlchemyREPO
+from app.user.db.postgres.repositories.sqlalchemy import CustomerSQLAlchemyREPO
 
 wishlist_router = APIRouter(prefix="/wishlist", tags=["❤️ Избранное"])
 
@@ -28,7 +28,7 @@ wishlist_router = APIRouter(prefix="/wishlist", tags=["❤️ Избранное
 )
 async def wishlist_user_booklist_router(
     session: SessionDependency,
-    user: UserAuthorizedREQT = Depends(auth_client),
+    user: AuthorizedCustomerREQT = Depends(auth_client),
 ):
     repo = BookSQLAlchemyREPO(session)
     query = WishlistFilterQH(book_repository=repo)
@@ -43,18 +43,18 @@ async def wishlist_user_booklist_router(
 async def remove_item_from_wishlist_router(
     book_id: int,
     session: SessionDependency,
-    user: UserAuthorizedREQT = Depends(auth_client),
+    user: AuthorizedCustomerREQT = Depends(auth_client),
 ):
     wishlist_book = RemoveBookFromWishlist(
         transaction=SQLAlchemyTransaction(session),
         book_repository=BookSQLAlchemyREPO(session),
-        user_repository=UserSQLAlchemyREPO(session),
+        user_repository=CustomerSQLAlchemyREPO(session),
     )
     await wishlist_book.remove(user_id=user.sub, book_id=book_id)
 
-    event = UserPersonalRecoEVENT(
+    event = CustomerPersonalRecoEVENT(
         user_id=user.sub,
-        type=UserEventENUM.WISHLIST_DEL,
+        type=CustomerEventENUM.WISHLIST_DEL,
         book_id=book_id,
     )
 
@@ -75,18 +75,18 @@ async def remove_item_from_wishlist_router(
 async def add_item_to_wishlist_router(
     session: SessionDependency,
     book_id: int,
-    user: UserAuthorizedREQT = Depends(auth_client),
+    user: AuthorizedCustomerREQT = Depends(auth_client),
 ):
     wishlist_book = AddBookToWishlist(
         transaction=SQLAlchemyTransaction(session),
         book_repository=BookSQLAlchemyREPO(session),
-        user_repository=UserSQLAlchemyREPO(session),
+        user_repository=CustomerSQLAlchemyREPO(session),
     )
     await wishlist_book.add(user_id=user.sub, book_id=book_id)
 
-    event = UserPersonalRecoEVENT(
+    event = CustomerPersonalRecoEVENT(
         user_id=user.sub,
-        type=UserEventENUM.WISHLIST_ADD,
+        type=CustomerEventENUM.WISHLIST_ADD,
         book_id=book_id,
     )
 

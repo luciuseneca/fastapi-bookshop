@@ -5,6 +5,6 @@ class TooManySChatMessages(AppException):
     code = 429
 
 
-class SChatUserMuted(AppException):
+class SChatCustomerMuted(AppException):
     msg = "you are temporarily muted in the support chat"
     code = 429

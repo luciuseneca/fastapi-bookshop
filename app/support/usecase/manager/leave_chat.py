@@ -1,4 +1,4 @@
-from app.core.config.support.redis.cache.user_schat import user_chat_cache_key
+from app.core.config.support.redis.cache.customer_schat import user_chat_cache_key
 from app.core.config.support.redis.pubsub import schat_channel
 from app.shared.service.infrastructure.base import is_exists
 from app.shared.db.postgres.repositories.sqlalchemy.transaction import SQLAlchemyTransaction

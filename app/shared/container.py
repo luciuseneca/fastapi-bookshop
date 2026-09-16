@@ -5,7 +5,7 @@ import httpx
 from elasticsearch import AsyncElasticsearch
 from sqlalchemy.ext.asyncio import AsyncSession
 from qdrant_client import AsyncQdrantClient
-from app.user.db.qdrant.collections.user_reco_profile import UserRecoProfileQdrantCollection
+from app.user.db.qdrant.collections.customer_reco_profile import CustomerRecoProfileQdrantCollection
 from app.core.config.base import Settings, get_settings
 from app.core.config.shared.qdrant.embedding import BGE_M3_EMBEDDING_MODEL
 from app.core.db.postgres import DatabaseHelper
@@ -102,7 +102,7 @@ class QdrantProvider(Provider):
     def qdrant_collection_initializer(
         self,
         books_collection: BooksQdrantCollection,
-        user_reco_profile_collection: UserRecoProfileQdrantCollection,
+        user_reco_profile_collection: CustomerRecoProfileQdrantCollection,
         faq_collection: FaqQdrantCollection,
     ) -> QdrantCollectionInitializer:
         return QdrantCollectionInitializer(

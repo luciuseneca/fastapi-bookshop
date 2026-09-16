@@ -1,6 +1,6 @@
 from typing import Optional
 from app.core.config.support.rabbitmq.routing_keys import LLM_QUEUE
-from app.core.config.support.redis.cache.user_schat import USER_SCHAT_CACHE_TTL, user_chat_cache_key
+from app.core.config.support.redis.cache.customer_schat import USER_SCHAT_CACHE_TTL, user_chat_cache_key
 from app.core.config.support.redis.keys.rate_limit_schat import (
     RATE_LIMIT_MSG_SCHAT_MAX,
     RATE_LIMIT_MSG_SCHAT_TTL,
@@ -24,8 +24,8 @@ from app.support.api.responses.websoket import WSMessageKeysEnum, WSMessageTypeE
 from app.support.db.sqlalchemy.repositories.chat import ChatSQLAlchemyRepository
 from app.support.db.sqlalchemy.repositories.chat_messages import ChatMsgSQLAlchemyRepository
 from app.support.exceptions.chat import ChatNotFound
-from app.support.exceptions.message import SChatUserMuted, TooManySChatMessages
-from app.support.dto.events.user_msg import ChatUserMsgEVT
+from app.support.exceptions.message import SChatCustomerMuted, TooManySChatMessages
+from app.support.dto.events.customer_msg import ChatCustomerMsgEVT
 from app.support.models import ChatMessageModel, ChatMessageSender
 from app.support.services.chat.escalation import chat_is_escalated, detect_chat_escalation
 
@@ -79,11 +79,11 @@ class ChatEscalationUC:
                 ex=SCHAT_MUTE_TTL,
             )
             await self.redis_keyspace.key.remove(key)
-            raise SChatUserMuted()
+            raise SChatCustomerMuted()
 
     async def _check_user_antispam(self, user_id: int) -> None:
         if await self.redis_keyspace.key.exists(schat_mute_key(user_id)):
-            raise SChatUserMuted()
+            raise SChatCustomerMuted()
 
         key = rate_limit_msg_schat_key(user_id)
 
@@ -139,5 +139,5 @@ class ChatEscalationUC:
 
         # бот отвечает только пока чат не передан оператору
         if not chat_is_escalated(chat) and not chat.manager_id:
-            event = ChatUserMsgEVT(chat_id=chat.id, message=user_text)
+            event = ChatCustomerMsgEVT(chat_id=chat.id, message=user_text)
             await publish_rmq(event=event, routing_key=LLM_QUEUE)

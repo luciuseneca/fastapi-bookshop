@@ -1,4 +1,4 @@
-from app.core.config.support.redis.cache.user_schat import chat_schat_cache_key, user_chat_cache_key
+from app.core.config.support.redis.cache.customer_schat import chat_schat_cache_key, user_chat_cache_key
 from app.core.config.support.redis.pubsub import schat_channel
 from app.core.config.support.redis.keys.schat_active_msg import user_active_msg_chat_key
 from app.shared.service.infrastructure.base import is_exists

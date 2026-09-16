@@ -53,5 +53,5 @@ class ChatRead(ChatBase):
 
 class ChatFull(ChatRead):
     messages: List[ChatMessageRead]
-    # Можно добавить краткую инфу о пользователе, если есть UserRead схема
-    # user: Optional[UserRead] = None 
+    # Можно добавить краткую инфу о пользователе, если есть CustomerRead схема
+    # user: Optional[CustomerRead] = None

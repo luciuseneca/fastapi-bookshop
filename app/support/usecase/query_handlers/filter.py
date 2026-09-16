@@ -1,4 +1,4 @@
-from app.core.config.support.redis.cache.user_schat import USER_SCHAT_CACHE_TTL, user_chat_cache_key
+from app.core.config.support.redis.cache.customer_schat import USER_SCHAT_CACHE_TTL, user_chat_cache_key
 from app.shared.service.infrastructure.base import is_exists
 from app.shared.db.redis import redis_cache
 from app.support.api.responses.chat import ChatRead

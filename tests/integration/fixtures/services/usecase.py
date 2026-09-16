@@ -1,9 +1,9 @@
 import pytest_asyncio
 from app.user.service.usecase.jwt.refresh_update import JwtRefreshTokenUpdateUC
-from app.user.service.usecase.ouath.google_authorization import UserGoogleAuthorizationUC
-from app.user.service.usecase.user.authentication import UserAuthenticationUC
-from app.user.service.usecase.user.authorization import UserAuthorizationUC
-from app.user.service.usecase.user.logout import UserLogoutUC
+from app.user.service.usecase.ouath.google_authorization import CustomerGoogleAuthorizationUC
+from app.user.service.usecase.customer.authentication import CustomerAuthenticationUC
+from app.user.service.usecase.customer.authorization import CustomerAuthorizationUC
+from app.user.service.usecase.customer.logout import CustomerLogoutUC
 from app.core.config.base import get_settings
 
 # client
@@ -15,7 +15,7 @@ def user_authentication_usecase(
 ):
     settings = get_settings()
 
-    return UserAuthenticationUC(
+    return CustomerAuthenticationUC(
         transaction=transaction,
         user_repository=user_repository,
         otp_auth_session=otp_auth_session,
@@ -33,7 +33,7 @@ def user_authorization_usecase(
 ):
     settings = get_settings()
 
-    return UserAuthorizationUC(
+    return CustomerAuthorizationUC(
         transaction=transaction,
         user_repository=user_repository,
         otp_auth_session=otp_auth_session,
@@ -47,7 +47,7 @@ def user_authorization_usecase(
 def user_logout_usecase(
     jwt_refresh_session,
 ):
-    return UserLogoutUC(
+    return CustomerLogoutUC(
         jwt_refresh_session=jwt_refresh_session,
     )
 
@@ -59,7 +59,7 @@ def user_google_authorization_usecase(
     jwt_generator,
     jwt_refresh_session,
 ):
-    return UserGoogleAuthorizationUC(
+    return CustomerGoogleAuthorizationUC(
         transaction=transaction,
         user_repository=user_repository,
         jwt_generator=jwt_generator,

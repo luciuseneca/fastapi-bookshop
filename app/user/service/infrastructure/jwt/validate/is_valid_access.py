@@ -1,10 +1,10 @@
 from jwt.exceptions import PyJWTError
-from app.user.dto.user.authorized import UserAuthorizedDTO
+from app.user.dto.customer.authorized import CustomerAuthorizedDTO
 from app.user.exception.jwt.invalid import JwtInvalidERR, JwtTypeInvalidERR
 from app.user.service.infrastructure.jwt.decode import jwt_decode
 from app.core.config.base import get_settings
 
-def is_valid_jwt_access_token(token: str) -> UserAuthorizedDTO:
+def is_valid_jwt_access_token(token: str) -> CustomerAuthorizedDTO:
     settings = get_settings()
 
     try:

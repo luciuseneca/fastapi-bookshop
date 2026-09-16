@@ -5,7 +5,7 @@ from dishka import AsyncContainer
 from app.core.config.support.rabbitmq.routing_keys import LLM_QUEUE
 from app.core.container import create_dishka_container
 from app.shared.service.infrastructure.rabbitmq.connection import get_rabbitmq_channel
-from app.support.dto.events.user_msg import ChatUserMsgEVT
+from app.support.dto.events.customer_msg import ChatCustomerMsgEVT
 from app.support.usecase.bot_answer import BotAnswerUC
 
 logger = logging.getLogger(__name__)
@@ -21,7 +21,7 @@ async def start_consumer(container: AsyncContainer):
                 # ошибка на одном сообщении не должна ронять consumer целиком
                 try:
                     data = json.loads(message.body.decode())
-                    event = ChatUserMsgEVT(**data)
+                    event = ChatCustomerMsgEVT(**data)
 
                     async with container() as request_container:
                         chat_bot_answer = await request_container.get(BotAnswerUC)

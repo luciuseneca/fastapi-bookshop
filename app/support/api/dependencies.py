@@ -2,13 +2,13 @@ from fastapi import Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.user.api.dependencies import auth_manager
-from app.user.api.requests.user.auth import UserAuthorizedREQT
+from app.user.api.requests.customer.auth import AuthorizedCustomerREQT
 from app.user.db.postgres.models import UserModel, UserRoleENUM
 from app.core.db.postgres import db_helper
 
 
 async def get_current_manager(
-    payload: UserAuthorizedREQT = Depends(auth_manager),
+    payload: AuthorizedCustomerREQT = Depends(auth_manager),
     db: AsyncSession = Depends(db_helper.session_getter),
 ) -> UserModel:
     """Двухуровневая проверка менеджера: роль в JWT (auth_manager),
@@ -18,7 +18,7 @@ async def get_current_manager(
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="User not found",
+            detail="Customer not found",
         )
 
     if user.role != UserRoleENUM.MANAGER or not user.is_active:

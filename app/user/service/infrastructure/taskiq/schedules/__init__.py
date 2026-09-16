@@ -1,1 +1,1 @@
-from .user.update_user_recs_vector import update_user_reco_books_profile_schedule
+from .customer.update_customer_recs_vector import update_user_reco_books_profile_schedule

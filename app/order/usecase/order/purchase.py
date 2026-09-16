@@ -5,8 +5,8 @@ from decimal import Decimal, ROUND_HALF_UP
 import stripe
 from sqlalchemy.exc import DBAPIError
 
-from app.user.db.postgres.repositories.sqlalchemy import UserSQLAlchemyREPO
-from app.user.exception.user.exists import UserNotFoundERR
+from app.user.db.postgres.repositories.sqlalchemy import CustomerSQLAlchemyREPO
+from app.user.exception.customer.exists import CustomerNotFoundERR
 from app.core.config.base import get_settings
 from app.order.api.requests.order.create import CreateOrderREQT
 from app.order.db.models.order import (
@@ -53,7 +53,7 @@ class BuyBooks:
         self,
         transaction: SQLAlchemyTransaction,
         book_repository: BookSQLAlchemyREPO,
-        user_repository: UserSQLAlchemyREPO,
+        user_repository: CustomerSQLAlchemyREPO,
         order_repository: OrderSQLAlchemyRepository,
         payment_repository: PaymentSQLAlchemyRepository,
     ):
@@ -88,7 +88,7 @@ class BuyBooks:
 
             user = await is_exists(
                 self.user_repository.get_by_id(id=user_id),
-                UserNotFoundERR(),
+                CustomerNotFoundERR(),
             )
 
             try:

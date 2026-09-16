@@ -1,12 +1,12 @@
 from app.user.exception.jwt.invalid import JwtInvalidFormatERR
 import jwt
-from app.user.dto.user.authorized import UserAuthorizedDTO
+from app.user.dto.customer.authorized import CustomerAuthorizedDTO
 from app.core.config.base import get_settings
 from app.user.service.infrastructure.jwt.keys import load_public_key
 
 settings = get_settings()
 
-def jwt_decode(token: str) -> UserAuthorizedDTO:
+def jwt_decode(token: str) -> CustomerAuthorizedDTO:
     if "." not in token:
         raise JwtInvalidFormatERR()
     
@@ -16,4 +16,4 @@ def jwt_decode(token: str) -> UserAuthorizedDTO:
         algorithms=[settings.jwt.algorithm],
     )
     
-    return UserAuthorizedDTO(**jwt_token_payload)
+    return CustomerAuthorizedDTO(**jwt_token_payload)

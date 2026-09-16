@@ -5,11 +5,11 @@ from aio_pika.abc import (
     AbstractIncomingMessage,
     AbstractQueue,
 )
-from app.user.api.events.user.personal_reco import (
-    UserPersonalRecoEVENT,
+from app.user.api.events.customer.personal_reco import (
+    CustomerPersonalRecoEVENT,
 )
 from app.user.service.infrastructure.rabbitmq.producer.reco_events import USER_EVENTS_EXCHANGE_NAME
-from app.product.service.usecase.book.personal_reco import BookPersonalRecoForUserUC
+from app.product.service.usecase.book.personal_reco import BookPersonalRecoForCustomerUC
 from app.shared.service.infrastructure.dishka.base import get_container
 from app.shared.service.infrastructure.rabbitmq.connection import (
     get_rabbitmq_channel,
@@ -65,14 +65,14 @@ async def _process_message(
     try:
         async with message.process(requeue=False):
             event = (
-                UserPersonalRecoEVENT
+                CustomerPersonalRecoEVENT
                 .model_validate_json(message.body)
             )
 
             container = get_container()
 
             async with container() as request_container:
-                book_personal_reco_uc = await request_container.get(BookPersonalRecoForUserUC)
+                book_personal_reco_uc = await request_container.get(BookPersonalRecoForCustomerUC)
                 await book_personal_reco_uc.generate(event)
     except Exception:
         logger.exception(

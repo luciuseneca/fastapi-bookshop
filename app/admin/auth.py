@@ -3,7 +3,7 @@ from fastapi import Request
 from sqlalchemy import select
 from app.core.config.base import get_settings
 from app.core.db.postgres import db_helper
-from app.user.service.infrastructure.user.check_password import user_check_password
+from app.user.service.infrastructure.customer.check_password import user_check_password
 from app.user.db.postgres.models import UserModel, UserRoleENUM
 
 class AdminAuth(AuthenticationBackend):

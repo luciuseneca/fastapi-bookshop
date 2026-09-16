@@ -1,1 +1,1 @@
-from .user import UserSQLAlchemyREPO
+from .customer import CustomerSQLAlchemyREPO

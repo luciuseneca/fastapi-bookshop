@@ -1,5 +1,5 @@
 from typing import Optional
-from app.core.config.support.redis.cache.user_schat import USER_SCHAT_CACHE_TTL, chat_schat_cache_key
+from app.core.config.support.redis.cache.customer_schat import USER_SCHAT_CACHE_TTL, chat_schat_cache_key
 from app.core.config.support.redis.pubsub import schat_channel
 from app.core.config.support.redis.keys.schat_active_msg import USER_ACTIVE_MSG_SCHAT_TLL, user_active_msg_chat_key
 from app.shared.service.infrastructure.base import is_exists

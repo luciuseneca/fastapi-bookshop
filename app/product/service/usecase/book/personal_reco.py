@@ -1,28 +1,28 @@
 import logging
-from app.user.api.events.user.personal_reco import UserPersonalRecoEVENT
-from app.user.db.postgres.repositories.sqlalchemy.user_event import UserEventSQLAlchemyREPO
-from app.user.service.infrastructure.taskiq.schedules.user.base import IUserSchedulesPublisher
-from app.user.service.infrastructure.user.reco_profile import UserPersonalBooksRecoProfileCache, UserRecoKeys
-from app.core.config.client.user.personal_book_reco import VECTOR_FLAG_TTL
+from app.user.api.events.customer.personal_reco import CustomerPersonalRecoEVENT
+from app.user.db.postgres.repositories.sqlalchemy.customer_event import CustomerEventSQLAlchemyREPO
+from app.user.service.infrastructure.taskiq.schedules.customer.base import ICustomerSchedulesPublisher
+from app.user.service.infrastructure.customer.reco_profile import CustomerPersonalBooksRecoProfileCache, CustomerRecoKeys
+from app.core.config.client.customer.personal_book_reco import VECTOR_FLAG_TTL
 from app.product.db.postgres.repositories.sqlalchemy.book import BookSQLAlchemyREPO
 from app.shared.db.postgres.repositories.sqlalchemy.transaction import SQLAlchemyTransaction
 from app.shared.service.infrastructure.redis.clients import RedisClient
-from app.user.db.postgres.models import USER_EVENT_WEIGHTS, UserEventENUM, UserEventModel
+from app.user.db.postgres.models import USER_EVENT_WEIGHTS, CustomerEventENUM, CustomerEventModel
 from app.shared.service.infrastructure.redis.clients import RedisClient
 
 logger = logging.getLogger(__name__)
 
 EVENT_VERSION_TTL = 86400 * 30 # 30 days
 
-class BookPersonalRecoForUserUC:
+class BookPersonalRecoForCustomerUC:
     def __init__(
         self,
         redis: RedisClient,
-        user_profile_cache: UserPersonalBooksRecoProfileCache,
+        user_profile_cache: CustomerPersonalBooksRecoProfileCache,
         transaction: SQLAlchemyTransaction,
         book_repository: BookSQLAlchemyREPO,
-        user_event_repository: UserEventSQLAlchemyREPO,
-        schedule_publisher: IUserSchedulesPublisher,
+        user_event_repository: CustomerEventSQLAlchemyREPO,
+        schedule_publisher: ICustomerSchedulesPublisher,
     ):
         self._redis = redis
         self._transaction = transaction
@@ -31,13 +31,13 @@ class BookPersonalRecoForUserUC:
         self.book_repository = book_repository
         self.user_event_repository = user_event_repository
  
-    async def generate(self, event: UserPersonalRecoEVENT) -> None:
+    async def generate(self, event: CustomerPersonalRecoEVENT) -> None:
         """Обрабатывает входящее пользовательское событие для персональных рекомендаций.
 
         Последовательность действий:
         1. Пропускает дубликат события просмотра (VIEW).
         2. В транзакции получает метаданные книги (category_id, author_id), вычисляет вес
-            события и сохраняет событие в БД (UserEventModel).
+            события и сохраняет событие в БД (CustomerEventModel).
         3. Логирует и пробрасывает исключения при неудаче сохранения.
         4. Выполняет пост-обработку: инвалидирует кэш профиля пользователя, чтобы
             следующий запрос профиля пересобрал его из БД с учётом нового события.
@@ -57,7 +57,7 @@ class BookPersonalRecoForUserUC:
                     user_id=event.user_id,
                 )
 
-                user_db_event = UserEventModel(
+                user_db_event = CustomerEventModel(
                     user_id=event.user_id,
                     book_id=event.book_id,
                     event_type=event.type,
@@ -70,10 +70,10 @@ class BookPersonalRecoForUserUC:
                     user_db_event
                 )
                 
-                logger.info("Event saved in UserEventModel")
+                logger.info("Event saved in CustomerEventModel")
         except Exception:
             logger.exception(
-                "Failed to save event in UserEventModel",
+                "Failed to save event in CustomerEventModel",
                 extra={
                     "user_id": event.user_id,
                     "book_id": event.book_id,
@@ -98,7 +98,7 @@ class BookPersonalRecoForUserUC:
                 extra={"user_id": event.user_id},
             )
 
-    async def _is_duplicate_view(self, event: UserPersonalRecoEVENT) -> bool:
+    async def _is_duplicate_view(self, event: CustomerPersonalRecoEVENT) -> bool:
         """Проверяет, является ли событие VIEW по книге дубликатом.
 
         Для событий VIEW с book_id метод пытается создать ключ дедупликации в Redis,
@@ -108,7 +108,7 @@ class BookPersonalRecoForUserUC:
         """
 
         if (
-            event.type != UserEventENUM.VIEW
+            event.type != CustomerEventENUM.VIEW
             or not event.book_id
         ):
             return False
@@ -130,7 +130,7 @@ class BookPersonalRecoForUserUC:
     
     async def _book_meta(
         self,
-        event: UserPersonalRecoEVENT,
+        event: CustomerPersonalRecoEVENT,
     ) -> tuple[int | None, int | None]:
         """Получить meta-информацию о книге из события.
 
@@ -161,7 +161,7 @@ class BookPersonalRecoForUserUC:
     
     def _calculate_event_weight(
         self,
-        event_type: UserEventENUM,
+        event_type: CustomerEventENUM,
         meta: dict,
         user_id: int | None = None,
     ) -> float:
@@ -185,7 +185,7 @@ class BookPersonalRecoForUserUC:
 
         weight = USER_EVENT_WEIGHTS.get(event_type, 0.5)
 
-        if event_type == UserEventENUM.RATING:
+        if event_type == CustomerEventENUM.RATING:
             rating_value = meta.get("rating")
 
             if rating_value is None:
@@ -221,8 +221,8 @@ class BookPersonalRecoForUserUC:
             логирует предупреждение.
         """
 
-        version_key = UserRecoKeys.version(user_id)
-        pending_key = UserRecoKeys.pending(user_id)
+        version_key = CustomerRecoKeys.version(user_id)
+        pending_key = CustomerRecoKeys.pending(user_id)
 
         await self._redis.string.incr(version_key)
         await self._redis.key.expire(version_key, EVENT_VERSION_TTL)
