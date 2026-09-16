@@ -1,4 +1,4 @@
-from app.product.api.requests.filter_by_similar import FilterSimilarBooksREQT
+from app.product.api.requests.filter_by_similar import BooksFilterSimilarREQT
 from app.product.api.responses.book.preview import BooksPreviewPaginationRESP, BooksPreviewRESP
 from app.product.db.postgres.repositories.sqlalchemy.book import BookSQLAlchemyREPO
 from app.shared.api.requests.cursor_pagintaion import CursorMD5RandomPaginationREQT
@@ -9,7 +9,7 @@ class BookSimilarQH:
 
     async def by_category_and_author(
         self,
-        similar: FilterSimilarBooksREQT,
+        similar: BooksFilterSimilarREQT,
         random_pagination: CursorMD5RandomPaginationREQT,
     ) -> BooksPreviewPaginationRESP:
         books = await self.book_repository.get_similar_list_by_category_and_author_id(

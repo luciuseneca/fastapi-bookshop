@@ -1,5 +1,5 @@
 import pytest
-from app.user.api.requests.customer.auth import ConfirmAuthCustomerREQT
+from app.user.api.requests.customer.auth import CustomerAuthConfirmREQT
 from app.user.exception.otp.expire import OtpExpiredERR
 from app.user.exception.otp.invalid import OtpInvalidERR
 from app.user.service.infrastructure.otp.auth_session import otp_generate_session_id
@@ -27,7 +27,7 @@ async def test_user_login_confirm_success(
     )
     await otp_auth_session.create(otp)
 
-    user_data = ConfirmAuthCustomerREQT(
+    user_data = CustomerAuthConfirmREQT(
         session_id=otp.session_id,
         otp=otp.code,
     )
@@ -60,7 +60,7 @@ async def test_user_login_confirm_invalid_code(
     )
     await otp_auth_session.create(otp)
 
-    reqt = ConfirmAuthCustomerREQT(
+    reqt = CustomerAuthConfirmREQT(
         session_id=otp.session_id,
         otp="000000",
     )
@@ -73,7 +73,7 @@ async def test_user_login_confirm_invalid_code(
 async def test_user_login_confirm_expired_session(
     user_authorization_usecase,
 ):
-    reqt = ConfirmAuthCustomerREQT(
+    reqt = CustomerAuthConfirmREQT(
         session_id=otp_generate_session_id(),
         otp=otp_test_conf.code,
     )
@@ -96,7 +96,7 @@ async def test_user_login_confirm_user_not_found(
     )
     await otp_auth_session.create(otp)
 
-    reqt = ConfirmAuthCustomerREQT(
+    reqt = CustomerAuthConfirmREQT(
         session_id=otp.session_id,
         otp=otp.code,
     )

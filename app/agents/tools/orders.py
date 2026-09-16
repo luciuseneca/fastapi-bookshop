@@ -9,7 +9,7 @@ from app.order.db.models.order import OrderStatusENUM
 from app.order.db.sqlalchemy.repositories.order import OrderSQLAlchemyRepository
 
 
-class GetOrderArgs(BaseModel):
+class OrderGetArgs(BaseModel):
     order_id: Optional[int] = Field(
         default=None,
         description=(
@@ -19,7 +19,7 @@ class GetOrderArgs(BaseModel):
     )
 
 
-class ListOrdersArgs(BaseModel):
+class OrdersListArgs(BaseModel):
     status: Optional[OrderStatusENUM] = Field(
         default=None,
         description=(
@@ -39,7 +39,7 @@ def build_order_tools(
     order_repo: OrderSQLAlchemyRepository,
     user_id: int,
 ) -> list[BaseTool]:
-    @tool(args_schema=GetOrderArgs)
+    @tool(args_schema=OrderGetArgs)
     async def get_order(order_id: Optional[int] = None) -> str:
         """Get one order of the current user: by number, or the latest one if no number is given."""
         if order_id is not None:
@@ -58,7 +58,7 @@ def build_order_tools(
 
         return to_tool_json({"order": order_to_dict(order)})
 
-    @tool(args_schema=ListOrdersArgs)
+    @tool(args_schema=OrdersListArgs)
     async def list_orders(
         status: Optional[OrderStatusENUM] = None,
         limit: int = AGENT_ORDERS_LIST_LIMIT,

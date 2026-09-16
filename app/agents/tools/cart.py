@@ -9,13 +9,13 @@ from app.order.usecase.cart.add_item import AddBookToCart
 from app.product.exceptions import BookNotFoundERR, BookUnavailableERR
 
 
-class AddToCartArgs(BaseModel):
+class CartItemAddArgs(BaseModel):
     book_id: int = Field(
         description="Id of the book to add (take it from search tool results)",
     )
 
 
-class GetCartArgs(BaseModel):
+class CartGetArgs(BaseModel):
     pass
 
 
@@ -24,13 +24,13 @@ def build_cart_tools(
     user_id: int,
     cart_repo: Optional[CartSQLAlchemyRepository] = None,
 ) -> list[BaseTool]:
-    @tool(args_schema=GetCartArgs)
+    @tool(args_schema=CartGetArgs)
     async def get_cart() -> str:
         """Show the current user's shopping cart: items, quantities, prices, total."""
         cart = await cart_repo.get_by_user_id(user_id=user_id)
         return to_tool_json({"cart": cart_to_dict(cart)})
     
-    @tool(args_schema=AddToCartArgs)
+    @tool(args_schema=CartItemAddArgs)
     async def add_book_to_cart(book_id: int) -> str:
         """Add a book to the current user's cart by book id."""
         try:

@@ -8,5 +8,5 @@ class ChatMessagesHistoryRESP(BaseModel):
     data: Dict[str, Any]
 
 
-class HistoryPayload(BaseModel):
+class ChatMessagesHistoryPayload(BaseModel):
     messages: List[ChatMessageSchema]

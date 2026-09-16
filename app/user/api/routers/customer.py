@@ -2,7 +2,7 @@ from dishka import FromDishka
 from fastapi import APIRouter, Depends, Response, status
 from app.user.api.cookies import clear_auth_cookies, set_auth_cookies
 from app.user.api.dependencies import csrf_protect, get_jwt_refresh_cookie
-from app.user.api.requests.customer.auth import ConfirmAuthCustomerREQT
+from app.user.api.requests.customer.auth import CustomerAuthConfirmREQT
 from app.user.api.requests.customer.login import CustomerLoginREQT
 from app.user.api.responses.jwt.access import JwtAccessTokenRESP
 from app.user.api.requests.customer.register import CustomerRegisterREQT
@@ -54,7 +54,7 @@ async def login_user_router(
 )
 @inject
 async def user_login_confirm_router(
-    user_data: ConfirmAuthCustomerREQT,
+    user_data: CustomerAuthConfirmREQT,
     response: Response,
     user_authorization: FromDishka[CustomerAuthorizationUC],
 ):
@@ -73,7 +73,7 @@ async def user_login_confirm_router(
 )
 @inject
 async def user_register_confirm_router(
-    user_data: ConfirmAuthCustomerREQT,
+    user_data: CustomerAuthConfirmREQT,
     response: Response,
     user_authorization: FromDishka[CustomerAuthorizationUC],
 ):

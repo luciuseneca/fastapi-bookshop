@@ -7,10 +7,10 @@ class BookPersonalRecoEVENT(BaseModel):
     metadata: dict = Field(default_factory=dict)
 
 
-class SearchEventMeta(BaseModel):
+class BookSearchEventMeta(BaseModel):
     query: str
     results_count: int = 0
 
 
-class RatingEventMeta(BaseModel):
+class BookRatingEventMeta(BaseModel):
     rating: int = Field(ge=1, le=5)

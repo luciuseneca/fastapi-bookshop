@@ -33,7 +33,7 @@ class DBSettings(BaseModel):
     limit: int
     
 
-class TestDBSettings(BaseModel):
+class DBTestSettings(BaseModel):
     url: PostgresDsn
     echo: bool = False
 
@@ -70,7 +70,7 @@ class RedisSettings(BaseModel):
     url: str
 
 
-class AuthJWT(BaseModel):
+class JWTAuthSettings(BaseModel):
     private_key_path: Path
     public_key_path: Path
     algorithm: str
@@ -94,7 +94,7 @@ class OllamaSettings(BaseModel):
     url: str
 
 
-class OauthGoogleSettings(BaseModel):
+class GoogleOauthSettings(BaseModel):
     client_id: str
     client_secret: str
     server_metadata: str
@@ -139,15 +139,15 @@ class Settings(BaseSettings):
     auth: AuthSettings
     qdrant: QDrantSettings
     elasticsearch: ElasticsearchSettings
-    test_db: TestDBSettings
-    jwt: AuthJWT
+    test_db: DBTestSettings
+    jwt: JWTAuthSettings
     rabbitmq: RabbitMQSettings
     redis: RedisSettings
     otp: OtpSettings
     celery: CelerySettings
     smtp: SMTPSettings
     ollama: OllamaSettings
-    oauth_google: OauthGoogleSettings
+    oauth_google: GoogleOauthSettings
     llm: LLMSettings
     stripe: StripeSettings
 

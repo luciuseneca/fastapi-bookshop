@@ -22,7 +22,7 @@ from app.product.db.qdrant.repositories.books import BooksQdrantREPO
 from app.shared.service.infrastructure.ollama.embedder import OllamaEmbedder
 
 
-class SemanticSearchArgs(BaseModel):
+class BooksSemanticSearchArgs(BaseModel):
     query: str = Field(
         description=(
             "Search query describing mood, theme or plot, e.g. "
@@ -31,7 +31,7 @@ class SemanticSearchArgs(BaseModel):
     )
 
 
-class FilterBooksArgs(BaseModel):
+class BooksFilterArgs(BaseModel):
     title: Optional[str] = Field(
         default=None,
         description="Part of the book title",
@@ -69,7 +69,7 @@ def build_book_tools(
     shown_books: Optional["ShownBooksTracker"] = None,
     user_id: Optional[int] = None,
 ) -> list[BaseTool]:
-    @tool(args_schema=SemanticSearchArgs)
+    @tool(args_schema=BooksSemanticSearchArgs)
     async def semantic_search_books(query: str) -> str:
         """Semantic (vector) book search by mood, theme, plot or free-form description.
         Books already recommended in this dialog are excluded automatically."""
@@ -163,7 +163,7 @@ def build_book_tools(
             ],
         })
 
-    @tool(args_schema=FilterBooksArgs)
+    @tool(args_schema=BooksFilterArgs)
     async def filter_books(
         title: Optional[str] = None,
         author_name: Optional[str] = None,

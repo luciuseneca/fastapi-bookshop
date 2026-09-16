@@ -4,7 +4,7 @@ from fastapi import (
     status,
 )
 from app.user.api.events.customer.personal_reco import CustomerPersonalRecoEVENT
-from app.user.api.requests.customer.auth import AuthorizedCustomerREQT
+from app.user.api.requests.customer.auth import CustomerAuthorizedREQT
 from app.user.db.postgres.models import CustomerEventENUM
 from app.user.service.infrastructure.rabbitmq.producer.reco_events import publish_user_personal_books_reco_rmq_safe
 from app.product.db.postgres.repositories.sqlalchemy.book import BookSQLAlchemyREPO
@@ -28,7 +28,7 @@ wishlist_router = APIRouter(prefix="/wishlist", tags=["❤️ Избранное
 )
 async def wishlist_user_booklist_router(
     session: SessionDependency,
-    user: AuthorizedCustomerREQT = Depends(auth_client),
+    user: CustomerAuthorizedREQT = Depends(auth_client),
 ):
     repo = BookSQLAlchemyREPO(session)
     query = WishlistFilterQH(book_repository=repo)
@@ -43,7 +43,7 @@ async def wishlist_user_booklist_router(
 async def remove_item_from_wishlist_router(
     book_id: int,
     session: SessionDependency,
-    user: AuthorizedCustomerREQT = Depends(auth_client),
+    user: CustomerAuthorizedREQT = Depends(auth_client),
 ):
     wishlist_book = RemoveBookFromWishlist(
         transaction=SQLAlchemyTransaction(session),
@@ -75,7 +75,7 @@ async def remove_item_from_wishlist_router(
 async def add_item_to_wishlist_router(
     session: SessionDependency,
     book_id: int,
-    user: AuthorizedCustomerREQT = Depends(auth_client),
+    user: CustomerAuthorizedREQT = Depends(auth_client),
 ):
     wishlist_book = AddBookToWishlist(
         transaction=SQLAlchemyTransaction(session),

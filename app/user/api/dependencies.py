@@ -4,7 +4,7 @@ from dataclasses import asdict
 from fastapi import Depends, Request, WebSocket, status
 from jwt.exceptions import PyJWTError
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
-from app.user.api.requests.customer.auth import AuthorizedCustomerREQT
+from app.user.api.requests.customer.auth import CustomerAuthorizedREQT
 from app.user.exception.jwt.csrf import CsrfTokenInvalidERR
 from app.user.exception.jwt.forbidden import JwtRoleForbiddenERR
 from app.user.exception.jwt.invalid import JwtInvalidERR
@@ -19,7 +19,7 @@ security = HTTPBearer(auto_error=False)
 
 def auth_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
-) -> AuthorizedCustomerREQT:
+) -> CustomerAuthorizedREQT:
     """Любой валидный access-токен, без учёта роли.
 
     Для витрины (корзина, заказы, отзывы, чат) использовать auth_client:
@@ -29,14 +29,14 @@ def auth_user(
         raise JwtInvalidERR()
     
     jwt_acces_token_payload = is_valid_jwt_access_token(credentials.credentials)
-    return AuthorizedCustomerREQT.model_validate(asdict(jwt_acces_token_payload))
+    return CustomerAuthorizedREQT.model_validate(asdict(jwt_acces_token_payload))
 
 
 def require_roles(*allowed_roles: str):
     """Фабрика зависимостей: пускает только токены с ролью из allowed_roles."""
     def role_checker(
-        user: AuthorizedCustomerREQT = Depends(auth_user),
-    ) -> AuthorizedCustomerREQT:
+        user: CustomerAuthorizedREQT = Depends(auth_user),
+    ) -> CustomerAuthorizedREQT:
         if user.role not in allowed_roles:
             raise JwtRoleForbiddenERR()
         return user
@@ -50,7 +50,7 @@ auth_client = require_roles(AUTHORIZED_USER)
 
 def auth_user_optional(
     credentials: HTTPAuthorizationCredentials | None = Depends(security),
-) -> AuthorizedCustomerREQT | None:
+) -> CustomerAuthorizedREQT | None:
     """Опциональная авторизация покупателя.
 
     Менеджер здесь приравнивается к анониму: страницы отдаются, но события
@@ -63,7 +63,7 @@ def auth_user_optional(
         credentials.credentials
     )
 
-    user = AuthorizedCustomerREQT.model_validate(
+    user = CustomerAuthorizedREQT.model_validate(
         asdict(jwt_access_token_payload)
     )
 
@@ -73,7 +73,7 @@ def auth_user_optional(
     return user
     
 
-async def auth_user_ws(websocket: WebSocket) -> AuthorizedCustomerREQT:
+async def auth_user_ws(websocket: WebSocket) -> CustomerAuthorizedREQT:
     auth_header = websocket.headers.get(AUTHORIZATION_REQUEST_FIELD_CONF)
 
     if auth_header and auth_header.startswith(f"{AUTHORIZATION_BEARER_FIELD_CONF} "):

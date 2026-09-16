@@ -3,7 +3,7 @@ from sqlalchemy import Select, delete, func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload, contains_eager, selectinload
-from app.product.api.requests.filter_by_similar import FilterSimilarBooksREQT
+from app.product.api.requests.filter_by_similar import BooksFilterSimilarREQT
 from typing import List, Optional
 from app.product.db.postgres.models.book import BookModel, BookPopularityStatsModel
 from app.product.db.postgres.models.category import BookCategoryModel
@@ -141,7 +141,7 @@ class BookSQLAlchemyREPO(BaseSQLAlchemyREPO[BookModel]):
     
     async def get_similar_list_by_category_and_author_id(
         self,
-        similar: FilterSimilarBooksREQT,
+        similar: BooksFilterSimilarREQT,
         random_pagination: CursorMD5RandomPaginationREQT,
     ) -> CursorPaginationDTO:
         stmt = (

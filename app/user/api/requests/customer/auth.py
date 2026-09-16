@@ -2,7 +2,7 @@ from typing import Literal
 from uuid import UUID
 from pydantic import BaseModel, Field
 
-class AuthorizedCustomerREQT(BaseModel):
+class CustomerAuthorizedREQT(BaseModel):
     type: Literal["access_token"]
     jti: str
     exp: int
@@ -11,6 +11,6 @@ class AuthorizedCustomerREQT(BaseModel):
     role: str | None = None
 
 
-class ConfirmAuthCustomerREQT(BaseModel):
+class CustomerAuthConfirmREQT(BaseModel):
     session_id: UUID
     otp: str

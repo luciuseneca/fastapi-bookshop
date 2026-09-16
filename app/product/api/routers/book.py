@@ -11,20 +11,20 @@ from fastapi import (
 )
 from app.user.api.dependencies import auth_client, auth_user_optional
 from app.user.api.events.customer.personal_reco import CustomerPersonalRecoEVENT
-from app.user.api.requests.customer.auth import AuthorizedCustomerREQT
+from app.user.api.requests.customer.auth import CustomerAuthorizedREQT
 from app.user.db.postgres.models import CustomerEventENUM
 from app.user.service.infrastructure.rabbitmq.producer.reco_events import (
     publish_user_personal_books_reco_rmq,
     publish_user_personal_books_reco_rmq_safe,
 )
 from app.user.service.infrastructure.customer.reco_profile import CustomerPersonalBooksRecoProfile
-from app.product.api.events.book.personal_reco import BookPersonalRecoEVENT, SearchEventMeta
+from app.product.api.events.book.personal_reco import BookPersonalRecoEVENT, BookSearchEventMeta
 from app.product.api.requests.filter_by_category import (
     CategoryBooksByAuthorNameREQT,
     CategoryBooksByCountryREQT,
     CategoryBooksByTitleREQT,
 )
-from app.product.api.requests.filter_by_similar import FilterSimilarBooksREQT
+from app.product.api.requests.filter_by_similar import BooksFilterSimilarREQT
 from app.product.api.responses.book.main_reco import BooksMainRecoRESP
 from app.product.api.responses.book.preview import BooksPreviewPaginationRESP
 from app.product.api.responses.book.detail import BookDetailRESP
@@ -56,7 +56,7 @@ book_router = APIRouter(
 @inject
 async def get_main_book_recommendations(
     book_recommendations: FromDishka[BooksMainRecommendationsQH],
-    user: AuthorizedCustomerREQT = Depends(auth_client),
+    user: CustomerAuthorizedREQT = Depends(auth_client),
     encoded_cursor: str | None = Query(None, max_length=512),
 ) -> BooksMainRecoRESP:
     page = await book_recommendations.for_user(
@@ -112,7 +112,7 @@ async def filter_books_router(
 async def detail_book_router(
     book_slug: str,
     book: FromDishka[BookDetailQH],
-    user: AuthorizedCustomerREQT | None = Depends(auth_user_optional),
+    user: CustomerAuthorizedREQT | None = Depends(auth_user_optional),
 ) -> BookDetailRESP:
     book = await book.get_book(book_slug)
 
@@ -140,7 +140,7 @@ async def detail_book_router(
 @inject
 async def similar_books_by_category_and_author_router(
     books_similar: FromDishka[BookSimilarQH],
-    similar: FilterSimilarBooksREQT = Depends(),
+    similar: BooksFilterSimilarREQT = Depends(),
     random_pagination: CursorMD5RandomPaginationREQT = Depends(),
 ) -> BooksPreviewPaginationRESP:
     return await books_similar.by_category_and_author(
@@ -178,7 +178,7 @@ async def search_category_books_by_author_name_router(
     category_books_search: FromDishka[CategoryBooksSearchQH],
     filters: CategoryBooksByAuthorNameREQT = Depends(),
     pagination: CursorEncodedPaginationREQT = Depends(),
-    user: AuthorizedCustomerREQT | None = Depends(auth_user_optional),
+    user: CustomerAuthorizedREQT | None = Depends(auth_user_optional),
 ) -> BooksPreviewPaginationRESP:
     result = await category_books_search.by_author(
         filters=filters,
@@ -190,7 +190,7 @@ async def search_category_books_by_author_name_router(
         event = CustomerPersonalRecoEVENT(
             user_id=user.sub,
             type=CustomerEventENUM.SEARCH,
-            metadata=SearchEventMeta(
+            metadata=BookSearchEventMeta(
                 query=filters.name,
                 results_count=len(result.books),
             ).model_dump(),
@@ -215,7 +215,7 @@ async def search_category_books_by_title_router(
     category_books_search: FromDishka[CategoryBooksSearchQH],
     filters: CategoryBooksByTitleREQT = Depends(),
     pagination: CursorEncodedPaginationREQT = Depends(),
-    user: AuthorizedCustomerREQT | None = Depends(auth_user_optional),
+    user: CustomerAuthorizedREQT | None = Depends(auth_user_optional),
 ) -> BooksPreviewPaginationRESP:
     result = await category_books_search.by_title(
         filters=filters,
@@ -227,7 +227,7 @@ async def search_category_books_by_title_router(
         event = CustomerPersonalRecoEVENT(
             user_id=user.sub,
             type=CustomerEventENUM.SEARCH,
-            metadata=SearchEventMeta(
+            metadata=BookSearchEventMeta(
                 query=filters.title,
                 results_count=len(result.books),
             ).model_dump(),
@@ -284,7 +284,7 @@ async def run_update_books_popularity():
 )
 async def handle_personalized_reco_event_router(
     event: BookPersonalRecoEVENT,
-    user: AuthorizedCustomerREQT = Depends(auth_client),
+    user: CustomerAuthorizedREQT = Depends(auth_client),
 ):
     user_event = CustomerPersonalRecoEVENT(
         user_id=user.sub,

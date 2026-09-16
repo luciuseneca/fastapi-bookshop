@@ -5,7 +5,7 @@ class OrderItemREQT(BaseModel):
     quantity: int = Field(gt=0)
 
 
-class CreateOrderREQT(BaseModel):
+class OrderCreateREQT(BaseModel):
     items: list[OrderItemREQT]
 
     @field_validator("items")

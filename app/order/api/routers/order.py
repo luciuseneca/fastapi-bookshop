@@ -10,11 +10,11 @@ from fastapi import (
 )
 
 from app.user.api.dependencies import auth_client
-from app.user.api.requests.customer.auth import AuthorizedCustomerREQT
+from app.user.api.requests.customer.auth import CustomerAuthorizedREQT
 from app.user.db.postgres.repositories.sqlalchemy import CustomerSQLAlchemyREPO
 from app.core.config.base import get_settings
 from app.core.db.postgres import SessionDependency
-from app.order.api.requests.order.create import CreateOrderREQT
+from app.order.api.requests.order.create import OrderCreateREQT
 from app.order.db.sqlalchemy.repositories.cart import CartSQLAlchemyRepository
 from app.order.db.sqlalchemy.repositories.order import (
     OrderSQLAlchemyRepository,
@@ -37,9 +37,9 @@ order_router = APIRouter(prefix="/orders", tags=["⚜ Заказы"])
     status_code=status.HTTP_201_CREATED,
 )
 async def purchase_books_router(
-    data: CreateOrderREQT,
+    data: OrderCreateREQT,
     session: SessionDependency,
-    user: AuthorizedCustomerREQT = Depends(auth_client),
+    user: CustomerAuthorizedREQT = Depends(auth_client),
 ):
     purchase = BuyBooks(
         transaction=SQLAlchemyTransaction(session),
@@ -60,7 +60,7 @@ async def purchase_books_router(
 )
 async def purchase_cart_router(
     session: SessionDependency,
-    user: AuthorizedCustomerREQT = Depends(auth_client),
+    user: CustomerAuthorizedREQT = Depends(auth_client),
 ):
     buy_books = BuyBooks(
         transaction=SQLAlchemyTransaction(session),

@@ -8,7 +8,7 @@ from sqlalchemy.exc import DBAPIError
 from app.user.db.postgres.repositories.sqlalchemy import CustomerSQLAlchemyREPO
 from app.user.exception.customer.exists import CustomerNotFoundERR
 from app.core.config.base import get_settings
-from app.order.api.requests.order.create import CreateOrderREQT
+from app.order.api.requests.order.create import OrderCreateREQT
 from app.order.db.models.order import (
     OrderItemModel,
     OrderModel,
@@ -72,7 +72,7 @@ class BuyBooks:
     async def buy(
         self,
         user_id: int,
-        order_data: CreateOrderREQT,
+        order_data: OrderCreateREQT,
         payment_method: PaymentMethodENUM = PaymentMethodENUM.CARD,
     ) -> CheckoutResultDTO:
         items = order_data.items

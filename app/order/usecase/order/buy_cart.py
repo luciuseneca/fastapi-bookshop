@@ -1,4 +1,4 @@
-from app.order.api.requests.order.create import CreateOrderREQT, OrderItemREQT
+from app.order.api.requests.order.create import OrderCreateREQT, OrderItemREQT
 from app.order.db.models.order import PaymentMethodENUM
 from app.order.db.sqlalchemy.repositories.cart import CartSQLAlchemyRepository
 from app.order.dto.order.checkout import CheckoutResultDTO
@@ -36,7 +36,7 @@ class BuyCart:
         if len(cart.items) > MAX_CART_ITEMS:
             raise OrderItemsLimitExceededERR()
 
-        order_data = CreateOrderREQT(
+        order_data = OrderCreateREQT(
             items=[
                 OrderItemREQT(book_id=item.book_id, quantity=item.quantity)
                 for item in cart.items

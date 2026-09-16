@@ -1,4 +1,4 @@
-from app.user.api.requests.customer.auth import ConfirmAuthCustomerREQT
+from app.user.api.requests.customer.auth import CustomerAuthConfirmREQT
 from app.user.db.postgres.repositories.sqlalchemy import CustomerSQLAlchemyREPO
 from app.user.dto.jwt.access import JWTAccessTokenDTO
 from app.user.dto.jwt.pair import JWTTokensDTO
@@ -38,7 +38,7 @@ class CustomerAuthorizationUC:
         self.jwt_generator = jwt_generator
         self.settings = settings
         
-    async def login_confirm(self, user_data: ConfirmAuthCustomerREQT) -> JWTTokensDTO:
+    async def login_confirm(self, user_data: CustomerAuthConfirmREQT) -> JWTTokensDTO:
         otp = await self._get_valid_otp(user_data)
 
         user = await is_exists(
@@ -50,7 +50,7 @@ class CustomerAuthorizationUC:
         await self.otp_auth_session.delete(otp)
         return await self._jwt_tokens(user_id)
         
-    async def register_confirm(self, user_data: ConfirmAuthCustomerREQT) -> JWTTokensDTO:
+    async def register_confirm(self, user_data: CustomerAuthConfirmREQT) -> JWTTokensDTO:
         otp = await self._get_valid_otp(user_data)
         user = await self.user_repository.get_by_email(email=otp.owner)
         
@@ -88,7 +88,7 @@ class CustomerAuthorizationUC:
             refresh_token=refresh_token,
         )
     
-    async def _get_valid_otp(self, user_data: ConfirmAuthCustomerREQT) -> OtpDTO:
+    async def _get_valid_otp(self, user_data: CustomerAuthConfirmREQT) -> OtpDTO:
         otp = await is_exists(
             self.otp_auth_session.get(user_data.session_id), 
             OtpExpiredERR(),

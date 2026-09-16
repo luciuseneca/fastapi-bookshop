@@ -1,4 +1,4 @@
-from app.user.api.requests.customer.auth import AuthorizedCustomerREQT
+from app.user.api.requests.customer.auth import CustomerAuthorizedREQT
 from app.user.db.postgres.repositories.sqlalchemy import CustomerSQLAlchemyREPO
 from app.user.exception.customer.invalid_creds import CustomerInvalidCredentialsERR
 from app.product.db.postgres.models.review import ReviewModel
@@ -25,7 +25,7 @@ class WriteReview:
         
     async def for_book(
         self,
-        user: AuthorizedCustomerREQT,
+        user: CustomerAuthorizedREQT,
         review_data: ReviewWriteREQT
     ) -> None:
         user = await is_exists(

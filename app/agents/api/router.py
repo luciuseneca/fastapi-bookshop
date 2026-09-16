@@ -6,7 +6,7 @@ from sse_starlette.sse import EventSourceResponse
 from app.agents.api.requests import AgentChatREQT
 from app.agents.service import AgentChatService
 from app.user.api.dependencies import auth_client
-from app.user.api.requests.customer.auth import AuthorizedCustomerREQT
+from app.user.api.requests.customer.auth import CustomerAuthorizedREQT
 
 agent_router = APIRouter(prefix="/agent", tags=["🤖 ИИ Консультант"])
 
@@ -19,7 +19,7 @@ agent_router = APIRouter(prefix="/agent", tags=["🤖 ИИ Консультан�
 async def agent_chat_router(
     body: AgentChatREQT,
     service: FromDishka[AgentChatService],
-    user: AuthorizedCustomerREQT = Depends(auth_client),
+    user: CustomerAuthorizedREQT = Depends(auth_client),
 ):
     """SSE-события: `token` (кусок текста), `tool` (вызов инструмента),
     `done` (полный ответ), `error`."""
