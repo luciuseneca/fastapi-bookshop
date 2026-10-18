@@ -1,0 +1,7 @@
+default_permissions = "bookshop"
+
+[permissions.bookshop]
+extends = ":workspace"
+
+[permissions.bookshop.filesystem.":workspace_roots"]
+".env" = "deny"
