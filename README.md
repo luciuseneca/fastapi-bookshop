@@ -1,5 +1,17 @@
 # fastapi-bookshop
 
+Для локальной разработки используется Python **3.14.7** (версия также указана в
+`.python-version`). После установки этого интерпретатора выберите его в Poetry:
+
+```bash
+poetry env use 3.14.7
+poetry install
+poetry run python --version  # Python 3.14.7
+poetry run pytest tests/unit
+```
+
+Обе стадии Docker-образа используют `python:3.14.7-slim`.
+
 ## Быстрый старт
 
 Для запуска на чистом компьютере сначала выполните полную

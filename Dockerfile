@@ -1,4 +1,4 @@
-FROM python:3.13-slim AS builder
+FROM python:3.14.7-slim AS builder
 
 ENV POETRY_HOME="/opt/poetry" \
     POETRY_VERSION=2.3.3 \
@@ -21,7 +21,7 @@ COPY pyproject.toml poetry.lock ./
 RUN --mount=type=cache,target=/root/.cache/pypoetry \
     poetry install --no-root --no-ansi
 
-FROM python:3.13-slim
+FROM python:3.14.7-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \

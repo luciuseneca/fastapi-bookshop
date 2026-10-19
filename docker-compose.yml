@@ -180,8 +180,9 @@ services:
 
   qdrant:
     # тег запинен (latest на разных машинах даёт разные версии),
-    # v1.17 соответствует qdrant-client ^1.17 из pyproject
-    image: qdrant/qdrant:v1.17.0
+    # v1.19 соответствует qdrant-client 1.19.x из poetry.lock
+    # Существующие данные v1.17 обновлять через v1.18.3: docs/qdrant-upgrade.md
+    image: qdrant/qdrant:v1.19.2
     container_name: qdrant
     restart: unless-stopped
     logging: *logging
