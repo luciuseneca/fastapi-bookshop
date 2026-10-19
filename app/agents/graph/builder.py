@@ -1,6 +1,10 @@
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.tools import BaseTool
-from langgraph.graph import END, START, StateGraph
+from langgraph.graph import (
+    END,
+    START,
+    StateGraph,
+)
 from langgraph.graph.state import CompiledStateGraph
 from langgraph.prebuilt import ToolNode
 
@@ -19,7 +23,11 @@ from app.agents.graph.nodes import (
     should_call_tools,
 )
 from app.agents.graph.router import IntentRouterNode, route_by_intent
-from app.agents.graph.state import STATIC_INTENTS, AgentIntentENUM, AgentState
+from app.agents.graph.state import (
+    STATIC_INTENTS,
+    AgentIntentENUM,
+    AgentState,
+)
 from app.agents.smalltalk import CHITCHAT_FALLBACK_REPLIES, STATIC_INTENT_REPLIES
 
 # node names (also used to filter streamed tokens)

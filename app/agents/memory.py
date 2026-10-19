@@ -1,6 +1,10 @@
 import json
 
-from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
+from langchain_core.messages import (
+    AIMessage,
+    BaseMessage,
+    HumanMessage,
+)
 
 from app.agents.config.base import (
     AGENT_CHAT_HISTORY_KEY,

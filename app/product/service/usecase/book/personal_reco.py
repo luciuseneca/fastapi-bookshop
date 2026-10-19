@@ -7,7 +7,11 @@ from app.core.config.user.customer.personal_book_reco import VECTOR_FLAG_TTL
 from app.product.db.postgres.repositories.sqlalchemy.book import BookSQLAlchemyREPO
 from app.shared.db.postgres.repositories.sqlalchemy.transaction import SQLAlchemyTransaction
 from app.shared.service.infrastructure.redis.clients import RedisClient
-from app.user.db.postgres.models import USER_EVENT_WEIGHTS, CustomerEventENUM, CustomerEventModel
+from app.user.db.postgres.models import (
+    USER_EVENT_WEIGHTS,
+    CustomerEventENUM,
+    CustomerEventModel,
+)
 from app.shared.service.infrastructure.redis.clients import RedisClient
 
 logger = logging.getLogger(__name__)

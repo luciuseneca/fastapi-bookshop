@@ -1,5 +1,10 @@
 from dishka import FromDishka
-from fastapi import APIRouter, Depends, Response, status
+from fastapi import (
+    APIRouter,
+    Depends,
+    Response,
+    status,
+)
 from app.user.api.cookies import clear_auth_cookies, set_auth_cookies
 from app.user.api.dependencies import csrf_protect, get_jwt_refresh_cookie
 from app.user.api.requests.customer.auth import CustomerAuthConfirmREQT
@@ -12,7 +17,15 @@ from app.user.service.usecase.customer.authentication import CustomerAuthenticat
 from app.user.service.usecase.customer.authorization import CustomerAuthorizationUC
 from app.user.service.usecase.customer.logout import CustomerLogoutUC
 from app.user.api.responses.customer.succes_otp_send import succes_otp_sending_to_email_resp
-from app.core.config.user.customer.router_urls import USER_BASE_URL_CONF, USER_LOGIN_URL_CONF, USER_LOGIN_VERIFY_URL_CONF, USER_LOGOUT_ALL_URL_CONF, USER_LOGOUT_URL_CONF, USER_REGISTER_URL_CONF, USER_REGISTER_VERIFY_URL_CONF
+from app.core.config.user.customer.router_urls import (
+    USER_BASE_URL_CONF,
+    USER_LOGIN_URL_CONF,
+    USER_LOGIN_VERIFY_URL_CONF,
+    USER_LOGOUT_ALL_URL_CONF,
+    USER_LOGOUT_URL_CONF,
+    USER_REGISTER_URL_CONF,
+    USER_REGISTER_VERIFY_URL_CONF,
+)
 
 user_router = APIRouter(
     prefix=USER_BASE_URL_CONF,

@@ -1,5 +1,11 @@
 from qdrant_client import AsyncQdrantClient
-from qdrant_client.models import Any, Filter, PointIdsList, PointStruct, ScoredPoint
+from qdrant_client.models import (
+    Any,
+    Filter,
+    PointIdsList,
+    PointStruct,
+    ScoredPoint,
+)
 from app.shared.dto.qdrant_point import QdrantPointDTO
 
 class BaseQdrantREPO:

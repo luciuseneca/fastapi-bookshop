@@ -1,5 +1,9 @@
 import pytest
-from unittest.mock import AsyncMock, MagicMock, Mock
+from unittest.mock import (
+    AsyncMock,
+    MagicMock,
+    Mock,
+)
 from app.core.config.user.test.dto import user_test_conf
 from app.core.config.user.otp.test.dto import otp_test_conf
 from app.user.service.infrastructure.otp.auth_session import OtpAuthSession

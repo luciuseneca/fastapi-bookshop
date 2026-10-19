@@ -12,7 +12,12 @@ from app.user.service.infrastructure.jwt.refresh_session import JWTRefreshAuthSe
 from app.user.service.infrastructure.otp.auth_session import OtpAuthSession
 from app.user.db.qdrant.repositories.customer.reco_profile import CustomerRecoProfileQdrantREPO
 from app.user.service.infrastructure.taskiq.schedules.customer.base import CustomerTaskiqSchedulesPublisher
-from app.user.service.infrastructure.customer.reco_profile import CustomerPersonalBooksRecoProfile, CustomerPersonalBooksRecoProfileCache, CustomerProfileUpdateProcess, CustomerRecoProfileEmbeddingTextBuilder
+from app.user.service.infrastructure.customer.reco_profile import (
+    CustomerPersonalBooksRecoProfile,
+    CustomerPersonalBooksRecoProfileCache,
+    CustomerProfileUpdateProcess,
+    CustomerRecoProfileEmbeddingTextBuilder,
+)
 from app.user.service.usecase.jwt.refresh_update import JwtRefreshTokenUpdateUC
 from app.user.service.usecase.customer import CustomerAuthenticationUC, CustomerAuthorizationUC
 from app.user.service.usecase.ouath.google_authorization import CustomerGoogleAuthorizationUC

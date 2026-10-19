@@ -1,8 +1,16 @@
 from datetime import timedelta
-from sqlalchemy import Select, delete, func
+from sqlalchemy import (
+    Select,
+    delete,
+    func,
+)
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.orm import joinedload, contains_eager, selectinload
+from sqlalchemy.orm import (
+    joinedload,
+    contains_eager,
+    selectinload,
+)
 from app.product.api.requests.filter_by_similar import BooksFilterSimilarREQT
 from typing import List, Optional
 from app.product.db.postgres.models.book import BookModel, BookPopularityStatsModel

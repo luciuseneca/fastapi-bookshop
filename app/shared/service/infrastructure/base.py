@@ -31,7 +31,11 @@ def get_all_subclasses(cls: type) -> set[type]:
     return subclasses
 
 
-from dataclasses import asdict, fields, is_dataclass
+from dataclasses import (
+    asdict,
+    fields,
+    is_dataclass,
+)
 
 def copy_fields_from_model_to_entity(model, entity, exclude:set[str]=None):
     """

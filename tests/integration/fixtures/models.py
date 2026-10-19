@@ -14,7 +14,11 @@ from app.core.config.product.test.author.dto import author_dto_test_conf
 from app.core.config.product.test.paper.dto import paper_dto_test_conf
 from app.core.config.product.test.made_in.dto import made_in_dto_test_conf
 from app.core.config.product.test.review.dto import review_dto_test_conf
-from app.core.config.user.test.dto import user_test_conf, user_google_test_conf, user_github_test_conf
+from app.core.config.user.test.dto import (
+    user_test_conf,
+    user_google_test_conf,
+    user_github_test_conf,
+)
 from app.user.service.infrastructure.customer.check_password import user_hash_password
 from app.user.db.postgres.models import UserModel
 

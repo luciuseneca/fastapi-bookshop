@@ -1,7 +1,11 @@
 from datetime import datetime
 from typing import Annotated, Optional
 
-from pydantic import BaseModel, ConfigDict, StringConstraints
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    StringConstraints,
+)
 
 TemplateTitle = Annotated[
     str, StringConstraints(strip_whitespace=True, min_length=1, max_length=120)

@@ -1,5 +1,10 @@
 import redis.asyncio as redis
-from typing import Any, Dict, List, Optional
+from typing import (
+    Any,
+    Dict,
+    List,
+    Optional,
+)
 from app.shared.service.infrastructure.base import to_json
 from app.shared.service.infrastructure.redis.base import BaseRedisClient
 

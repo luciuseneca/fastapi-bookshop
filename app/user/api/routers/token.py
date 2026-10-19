@@ -1,5 +1,10 @@
 from dishka import FromDishka
-from fastapi import APIRouter, Depends, Response, status
+from fastapi import (
+    APIRouter,
+    Depends,
+    Response,
+    status,
+)
 from app.user.api.cookies import clear_auth_cookies, set_auth_cookies
 from app.user.api.dependencies import csrf_protect, get_jwt_refresh_cookie
 from app.user.api.responses.jwt.access import JwtAccessTokenRESP

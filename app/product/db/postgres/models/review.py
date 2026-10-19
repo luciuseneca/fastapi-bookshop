@@ -1,5 +1,10 @@
 from typing import TYPE_CHECKING, Optional
-from sqlalchemy import CheckConstraint, ForeignKey, Integer, Text
+from sqlalchemy import (
+    CheckConstraint,
+    ForeignKey,
+    Integer,
+    Text,
+)
 from sqlalchemy.orm import (
     Mapped,
     mapped_column,

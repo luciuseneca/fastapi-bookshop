@@ -1,5 +1,9 @@
 import jwt
-from datetime import datetime, timedelta, timezone
+from datetime import (
+    datetime,
+    timedelta,
+    timezone,
+)
 from app.core.config.base import get_settings
 from app.user.service.infrastructure.jwt.keys import load_private_key
 

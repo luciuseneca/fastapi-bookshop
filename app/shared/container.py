@@ -1,6 +1,11 @@
 from typing import AsyncIterable
 import aiohttp
-from dishka import Provider, Scope, from_context, provide
+from dishka import (
+    Provider,
+    Scope,
+    from_context,
+    provide,
+)
 import httpx
 from elasticsearch import AsyncElasticsearch
 from sqlalchemy.ext.asyncio import AsyncSession

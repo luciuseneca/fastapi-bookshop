@@ -4,7 +4,15 @@ import uuid
 
 from dishka import AsyncContainer, FromDishka
 from dishka.integrations.fastapi import inject
-from fastapi import APIRouter, Depends, Query, Response, WebSocket, WebSocketDisconnect, status
+from fastapi import (
+    APIRouter,
+    Depends,
+    Query,
+    Response,
+    WebSocket,
+    WebSocketDisconnect,
+    status,
+)
 from fastapi.websockets import WebSocketState
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -30,7 +38,11 @@ from app.support.api.responses.templates import (
     ReplyTemplateRead,
     ReplyTemplateUpdate,
 )
-from app.support.api.responses.websoket import WSMessageActionEnum, WSMessageKeysEnum, WSMessageTypeEnum
+from app.support.api.responses.websoket import (
+    WSMessageActionEnum,
+    WSMessageKeysEnum,
+    WSMessageTypeEnum,
+)
 from app.support.exceptions.chat import ChatNotFound
 from app.support.exceptions.manager import (
     ManagerAlreadyAssigned,

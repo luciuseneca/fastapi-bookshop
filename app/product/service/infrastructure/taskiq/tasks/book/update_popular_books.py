@@ -1,7 +1,15 @@
 import logging
-from datetime import datetime, timedelta, timezone
+from datetime import (
+    datetime,
+    timedelta,
+    timezone,
+)
 from decimal import Decimal
-from sqlalchemy import or_, select, func
+from sqlalchemy import (
+    or_,
+    select,
+    func,
+)
 from sqlalchemy.dialects.postgresql import insert
 from app.user.db.postgres.models import CustomerEventENUM, CustomerEventModel
 from app.order.db.models.order import OrderItemModel

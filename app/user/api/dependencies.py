@@ -1,7 +1,12 @@
 import hmac
 from dataclasses import asdict
 
-from fastapi import Depends, Request, WebSocket, status
+from fastapi import (
+    Depends,
+    Request,
+    WebSocket,
+    status,
+)
 from jwt.exceptions import PyJWTError
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from app.user.api.requests.customer.auth import CustomerAuthorizedREQT

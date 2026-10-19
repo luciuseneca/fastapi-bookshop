@@ -9,7 +9,12 @@ from dataclasses import asdict, dataclass
 from enum import StrEnum
 from app.shared.service.infrastructure.redis.clients import RedisClient
 from qdrant_client.models import ScoredPoint
-from sqlalchemy import Row, and_, or_, select
+from sqlalchemy import (
+    Row,
+    and_,
+    or_,
+    select,
+)
 from app.user.db.qdrant.repositories.customer.reco_profile import CustomerRecoProfileQdrantREPO
 from app.user.dto.customer.reco_profile import CustomerRecoProfileDTO
 from app.user.service.infrastructure.customer.reco_profile import CustomerPersonalBooksRecoProfile

@@ -1,6 +1,10 @@
 from datetime import datetime
 from typing import TYPE_CHECKING
-from sqlalchemy import DateTime, ForeignKey, text
+from sqlalchemy import (
+    DateTime,
+    ForeignKey,
+    text,
+)
 from sqlalchemy.orm import (
     Mapped, mapped_column,
     relationship, declared_attr

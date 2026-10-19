@@ -1,6 +1,10 @@
 from app.support.db.sqlalchemy.repositories.chat_messages import ChatMsgSQLAlchemyRepository
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict, field_serializer
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    field_serializer,
+)
 
 class ChatMessageSchema(BaseModel):
     sender: str

@@ -10,7 +10,11 @@ from app.user.db.postgres.repositories.sqlalchemy import CustomerSQLAlchemyREPO
 from app.user.db.postgres.repositories.sqlalchemy.customer_event import CustomerEventSQLAlchemyREPO
 from app.user.db.qdrant.repositories.customer.reco_profile import CustomerRecoProfileQdrantREPO
 from app.user.service.infrastructure.taskiq.schedules.customer.base import CustomerTaskiqSchedulesPublisher
-from app.user.service.infrastructure.customer.reco_profile import CustomerPersonalBooksRecoProfile, CustomerPersonalBooksRecoProfileCache, CustomerProfileUpdateProcess
+from app.user.service.infrastructure.customer.reco_profile import (
+    CustomerPersonalBooksRecoProfile,
+    CustomerPersonalBooksRecoProfileCache,
+    CustomerProfileUpdateProcess,
+)
 from app.core.db.postgres import DatabaseHelper
 from app.product.db.postgres.repositories.sqlalchemy.author import BookAuthorSQLAlchemyREPO
 from app.product.db.postgres.repositories.sqlalchemy.book import BookSQLAlchemyREPO

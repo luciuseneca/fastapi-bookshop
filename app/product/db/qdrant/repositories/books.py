@@ -1,5 +1,12 @@
 from qdrant_client import AsyncQdrantClient
-from qdrant_client.models import FieldCondition, Filter, HasIdCondition, MatchAny, MatchValue, ScoredPoint
+from qdrant_client.models import (
+    FieldCondition,
+    Filter,
+    HasIdCondition,
+    MatchAny,
+    MatchValue,
+    ScoredPoint,
+)
 from app.core.config.product.book.qdrant_collection_names import BOOKS_COLLECTION
 from app.shared.db.qdrant.base_repository import BaseQdrantREPO
 

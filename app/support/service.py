@@ -5,7 +5,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.user.db.postgres.models import UserModel, UserRoleENUM
 from app.support.api.responses.templates import ReplyTemplateCreate, ReplyTemplateUpdate
-from app.support.models import ChatMessageModel, ChatModel, ReplyTemplateModel
+from app.support.models import (
+    ChatMessageModel,
+    ChatModel,
+    ReplyTemplateModel,
+)
 from app.support.services.chat.assign_manager import assign_manager_to_chat
 from app.support.services.chat.close import close_chat
 

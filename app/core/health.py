@@ -1,7 +1,11 @@
 import asyncio
 import logging
 
-from fastapi import APIRouter, Response, status
+from fastapi import (
+    APIRouter,
+    Response,
+    status,
+)
 from sqlalchemy import text
 
 from app.core.db.postgres import db_helper
