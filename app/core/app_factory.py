@@ -1,7 +1,6 @@
 from contextlib import asynccontextmanager
 from pathlib import Path
 from fastapi import FastAPI
-from fastapi.responses import ORJSONResponse
 from fastapi.staticfiles import StaticFiles
 from app.admin.registry import ADMIN_VIEWS
 from app.admin.setup import init_admin
@@ -197,11 +196,18 @@ def setup_static(app: FastAPI) -> None:
 
 
 def create_app() -> FastAPI:
+    """Build the application with FastAPI's default JSON serialization.
+
+    Configure dependency injection, middleware, routes, error handlers, and
+    the admin interface. External resources are managed by the lifespan.
+
+    Returns:
+        Configured application ready to run its lifespan and serve requests.
+    """
     setup_logging(),
     
     app = FastAPI(
         lifespan=lifespan,
-        default_response_class=ORJSONResponse,
     )
 
     container = get_container()
